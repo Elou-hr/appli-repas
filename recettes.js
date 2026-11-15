@@ -1,8 +1,8 @@
 /* =====================================================================
    Recettes intégrées à l'appli
    - Quantités et calories POUR UNE PERSONNE (l'appli multiplie toute seule).
-   - c : Plat, Léger, Rapide, Végétarien ou Dessert
-   - k : kcal par personne (valeur moyenne), t : temps total en minutes
+   - c : Plat, Léger, Rapide, Végétarien, Dessert, Accompagnement, Apéritif ou Sauce et base
+   - k : kcal par personne (valeur moyenne), ou null si non défini, t : temps total en minutes
    - m : [protéines, glucides, lipides] en grammes par personne
    - kw : mots-clés séparés par des virgules
    - i : ingrédients. Formats acceptés :
@@ -665,7 +665,972 @@ window.RECETTES_BRUTES = [
 
   { n: 'Pancakes', c: 'Dessert', k: 340, t: 25, m: [10, 50, 10], kw: 'brunch, goûter, enfants',
     i: ['50 g Farine', '0.5 Œuf', '70 ml Lait', '5 g Sucre', '2 g Levure chimique', '5 g Beurre', '1 cc Sirop d’érable'],
-    s: ['Mélanger la farine, le sucre et la levure, puis ajouter l’œuf et le lait.', 'Ajouter le beurre fondu et mélanger sans trop travailler la pâte.', 'Cuire de petites louches 2 minutes de chaque côté dans une poêle chaude.', 'Servir avec le sirop d’érable.'] }
+    s: ['Mélanger la farine, le sucre et la levure, puis ajouter l’œuf et le lait.', 'Ajouter le beurre fondu et mélanger sans trop travailler la pâte.', 'Cuire de petites louches 2 minutes de chaque côté dans une poêle chaude.', 'Servir avec le sirop d’érable.'] },
+
+  /* ---- Lot 4 : bibliothèque (calories non définies quand on n’est pas sûr) ---- */
+  { n: 'Confit de canard et pommes de terre sautées', c: 'Plat', k: null, t: 45, m: null, kw: 'canard, sud-ouest, terroir, fête',
+    i: ['1 Cuisse de canard confite|Cuisses de canard confites', '250 g Pommes de terre', '1 Gousse d’ail|Gousses d’ail', '1 cs Persil', 'Sel et poivre'],
+    s: ['Préchauffer le four à 200 °C et poser les cuisses côté peau dans un plat.', 'Les réchauffer 20 minutes au four jusqu’à ce que la peau soit croustillante.', 'Pendant ce temps, couper les pommes de terre en dés et les dorer 20 minutes à la poêle dans un peu de graisse de canard.', 'Ajouter l’ail haché et le persil en fin de cuisson, saler, poivrer et servir avec le canard.'] },
+
+  { n: 'Bouillabaisse simplifiée', c: 'Plat', k: null, t: 75, m: null, kw: 'poisson, provence, marseille, soupe de poisson',
+    i: ['250 g Poissons blancs variés', '1 Pomme de terre|Pommes de terre', '0.5 Oignon', '0.5 Poireau', '1 Tomate|Tomates', '1 Gousse d’ail|Gousses d’ail', '1 pincée Safran', '1 cs Huile d’olive', '1 Tranche de pain|Tranches de pain', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon, le poireau et l’ail émincés dans l’huile d’olive.', 'Ajouter les tomates en morceaux, le safran et 400 ml d’eau par personne, puis laisser bouillir 15 minutes.', 'Ajouter les pommes de terre en rondelles et cuire 15 minutes.', 'Déposer les morceaux de poisson et cuire encore 8 à 10 minutes à petit feu.', 'Servir le bouillon avec le pain grillé, puis le poisson et les pommes de terre.'] },
+
+  { n: 'Fondue savoyarde', c: 'Plat', k: null, t: 25, m: null, kw: 'fromage, montagne, hiver, savoie, convivial',
+    i: ['70 g Beaufort', '70 g Comté', '60 g Emmental', '80 ml Vin blanc sec', '0.5 Gousse d’ail', '150 g Pain de campagne', 'Poivre'],
+    s: ['Frotter le caquelon avec l’ail coupé en deux.', 'Y chauffer le vin blanc sans le faire bouillir.', 'Ajouter les fromages râpés petit à petit en remuant en forme de huit jusqu’à ce que tout soit fondu.', 'Poivrer et poser le caquelon sur le réchaud ; tremper les cubes de pain avec les piques.'] },
+
+  { n: 'Aligot saucisse', c: 'Plat', k: null, t: 45, m: null, kw: 'aubrac, auvergne, fromage, purée, terroir',
+    i: ['250 g Pommes de terre', '80 g Tomme fraîche', '30 ml Crème fraîche', '15 g Beurre', '0.5 Gousse d’ail', '1 Saucisse de Toulouse|Saucisses de Toulouse', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre épluchées 20 minutes dans l’eau salée avec l’ail.', 'Les écraser en purée avec le beurre et la crème, sur feu doux.', 'Ajouter la tomme coupée en lamelles et tourner vigoureusement jusqu’à ce que la purée file.', 'Pendant ce temps, cuire la saucisse à la poêle 15 minutes en la retournant.', 'Servir l’aligot bien chaud avec la saucisse.'] },
+
+  { n: 'Côte de bœuf au four', c: 'Plat', k: null, t: 40, m: null, kw: 'bœuf, viande rouge, fête, barbecue',
+    i: ['300 g Côte de bœuf', '1 cs Huile', '10 g Beurre', '1 Branche de thym|Branches de thym', 'Fleur de sel et poivre'],
+    s: ['Sortir la viande du réfrigérateur 1 heure avant et préchauffer le four à 220 °C.', 'Saisir la côte 3 minutes par face dans une poêle très chaude avec l’huile.', 'Ajouter le beurre et le thym, arroser, puis finir au four 10 à 15 minutes selon la cuisson voulue.', 'Laisser reposer 10 minutes sous papier aluminium, trancher et assaisonner de fleur de sel.'] },
+
+  { n: 'Veau Marengo', c: 'Plat', k: null, t: 110, m: null, kw: 'veau, mijoté, tomate, champignons',
+    i: ['180 g Épaule de veau', '0.5 Oignon', '100 g Tomates concassées', '60 g Champignons de Paris', '50 ml Vin blanc', '1 cc Farine', '1 cs Huile d’olive', '1 Gousse d’ail', 'Thym', 'Sel et poivre'],
+    s: ['Dorer la viande en cubes dans l’huile, puis ajouter l’oignon émincé.', 'Saupoudrer de farine, mélanger, puis verser le vin blanc.', 'Ajouter les tomates, l’ail, le thym et un peu d’eau ; couvrir et mijoter 1 h 15.', 'Ajouter les champignons émincés et cuire encore 20 minutes. Servir avec du riz ou des pâtes.'] },
+
+  { n: 'Steak tartare', c: 'Plat', k: null, t: 15, m: null, kw: 'bœuf cru, bistrot, viande rouge',
+    i: ['160 g Bœuf haché frais', '1 Jaune d’œuf|Jaunes d’œuf', '1 cc Moutarde', '1 cc Câpres', '1 cc Échalote', '1 cc Cornichons', '1 cc Persil', 'Quelques gouttes de sauce Worcestershire', 'Sel et poivre'],
+    s: ['Hacher finement l’échalote, les câpres, les cornichons et le persil.', 'Mélanger la viande avec la moutarde, la sauce Worcestershire, le sel et le poivre.', 'Ajouter les condiments hachés et former un rond dans l’assiette.', 'Déposer le jaune d’œuf au centre et servir aussitôt, avec des frites ou une salade. À faire seulement avec une viande très fraîche du boucher.'] },
+
+  { n: 'Figatelli aux lentilles', c: 'Plat', k: null, t: 45, m: null, kw: 'corse, charcuterie, lentilles, hiver',
+    i: ['0.5 Figatellu|Figatelli', '70 g Lentilles vertes', '0.5 Carotte', '0.25 Oignon', '1 Feuille de laurier|Feuilles de laurier', 'Sel et poivre'],
+    s: ['Rincer les lentilles et les cuire 25 minutes dans l’eau froide portée à ébullition avec la carotte, l’oignon et le laurier.', 'Couper le figatellu en tronçons et les griller 10 minutes à la poêle.', 'Égoutter les lentilles, saler en fin de cuisson et poivrer.', 'Servir les lentilles avec les tronçons de figatellu par-dessus.'] },
+
+  { n: 'Choucroute de la mer', c: 'Plat', k: null, t: 60, m: null, kw: 'poisson, alsace, chou, saumon',
+    i: ['200 g Choucroute cuite', '80 g Saumon', '80 g Cabillaud', '40 g Crevettes', '1 Pomme de terre|Pommes de terre', '50 ml Vin blanc', '20 ml Crème fraîche', '10 g Beurre', 'Sel et poivre'],
+    s: ['Rincer la choucroute et la réchauffer 30 minutes avec le vin blanc et un peu d’eau.', 'Cuire les pommes de terre à l’eau 20 minutes.', 'Cuire les poissons en morceaux 8 minutes à la vapeur ou sur la choucroute, couvercle fermé.', 'Ajouter les crevettes en fin de cuisson et napper d’une sauce crème-beurre chaude.'] },
+
+  { n: 'Tartiflette au reblochon et poulet', c: 'Plat', k: null, t: 55, m: null, kw: 'savoie, fromage, gratin, montagne',
+    i: ['250 g Pommes de terre', '100 g Blanc de poulet', '0.25 Reblochon', '0.5 Oignon', '30 ml Crème fraîche', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre 20 minutes à l’eau, puis les couper en rondelles.', 'Dorer l’oignon émincé et le poulet en dés à la poêle.', 'Mélanger dans un plat avec les pommes de terre et la crème, saler peu et poivrer.', 'Poser le reblochon coupé en deux dans l’épaisseur, croûte en haut, et cuire 25 minutes à 200 °C.'] },
+
+  { n: 'Petit salé à la potée de chou', c: 'Plat', k: null, t: 120, m: null, kw: 'porc, potée, chou, hiver, terroir',
+    i: ['150 g Petit salé', '150 g Chou vert', '1 Carotte|Carottes', '1 Pomme de terre|Pommes de terre', '0.5 Navet', '0.5 Oignon', '1 Clou de girofle|Clous de girofle', 'Poivre'],
+    s: ['Dessaler le petit salé 1 heure dans l’eau froide si besoin, puis le mettre dans une marmite d’eau froide.', 'Porter à frémissement avec l’oignon piqué de girofle et cuire 45 minutes.', 'Ajouter le chou en quartiers blanchis, les carottes et le navet ; cuire 30 minutes.', 'Ajouter les pommes de terre et cuire encore 25 minutes. Servir avec de la moutarde.'] },
+
+  { n: 'Potée auvergnate', c: 'Plat', k: null, t: 150, m: null, kw: 'auvergne, porc, chou, hiver',
+    i: ['100 g Palette de porc demi-sel', '1 Saucisse fumée|Saucisses fumées', '150 g Chou vert', '1 Carotte|Carottes', '1 Pomme de terre|Pommes de terre', '0.5 Navet', '0.5 Poireau', 'Bouquet garni', 'Poivre'],
+    s: ['Mettre la palette dans une grande marmite d’eau froide avec le bouquet garni et porter à frémissement 1 heure.', 'Blanchir le chou 5 minutes dans une autre casserole.', 'Ajouter le chou, les carottes, le navet et le poireau dans la marmite ; cuire 40 minutes.', 'Ajouter les pommes de terre et la saucisse, puis cuire encore 30 minutes. Servir le bouillon à part.'] },
+
+  { n: 'Andouillette moutarde et frites', c: 'Plat', k: null, t: 40, m: null, kw: 'bistrot, charcuterie, troyes',
+    i: ['1 Andouillette|Andouillettes', '1 cs Moutarde à l’ancienne', '30 ml Crème fraîche', '200 g Pommes de terre', '1 cs Huile', 'Sel et poivre'],
+    s: ['Couper les pommes de terre en frites, les huiler et les cuire 30 minutes à 220 °C en les retournant.', 'Inciser légèrement l’andouillette et la cuire 15 minutes à la poêle ou au four.', 'Chauffer la crème avec la moutarde, saler et poivrer.', 'Servir l’andouillette nappée de sauce, avec les frites.'] },
+
+  { n: 'Pavé de saumon à l’oseille', c: 'Plat', k: null, t: 25, m: null, kw: 'poisson, sauce crème, bistrot',
+    i: ['1 Pavé de saumon|Pavés de saumon', '30 g Oseille', '50 ml Crème fraîche', '1 cc Échalote', '10 g Beurre', '80 g Riz', 'Sel et poivre'],
+    s: ['Cuire le riz selon le paquet.', 'Faire fondre l’échalote hachée dans le beurre, ajouter l’oseille ciselée : elle fond en 1 minute.', 'Verser la crème, saler, poivrer et laisser épaissir 3 minutes.', 'Cuire le saumon 4 minutes côté peau puis 2 minutes de l’autre côté, et servir avec la sauce et le riz.'] },
+
+  { n: 'Sole meunière', c: 'Plat', k: null, t: 20, m: null, kw: 'poisson, beurre, classique',
+    i: ['1 Sole|Soles', '1 cs Farine', '25 g Beurre', '0.5 Citron', '1 cs Persil', '150 g Pommes de terre vapeur', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre à la vapeur.', 'Saler, poivrer et fariner la sole vidée et pelée, puis tapoter pour retirer l’excès.', 'La cuire 4 à 5 minutes par face dans la moitié du beurre moussant.', 'Ajouter le reste du beurre, le jus de citron et le persil, arroser le poisson et servir.'] },
+
+  { n: 'Lotte à l’armoricaine', c: 'Plat', k: null, t: 50, m: null, kw: 'poisson, bretagne, sauce tomate, fête',
+    i: ['180 g Lotte', '1 cc Échalote', '100 g Tomates concassées', '50 ml Vin blanc', '1 cc Concentré de tomate', '30 ml Crème fraîche', '1 cs Huile d’olive', '1 pincée Piment d’Espelette', '70 g Riz', 'Sel et poivre'],
+    s: ['Dorer la lotte en tronçons dans l’huile 3 minutes, puis la réserver.', 'Faire revenir l’échalote, ajouter le vin blanc, les tomates, le concentré et le piment.', 'Laisser réduire 15 minutes, puis ajouter la crème.', 'Remettre la lotte et cuire 8 minutes à couvert. Servir avec le riz.'] },
+
+  { n: 'Coquilles Saint-Jacques à la bretonne', c: 'Plat', k: null, t: 35, m: null, kw: 'fruits de mer, bretagne, fête, gratin',
+    i: ['4 Noix de Saint-Jacques', '1 cc Échalote', '30 g Champignons de Paris', '40 ml Crème fraîche', '20 ml Vin blanc', '10 g Beurre', '1 cs Chapelure', 'Sel et poivre'],
+    s: ['Préchauffer le four à 220 °C.', 'Faire revenir l’échalote et les champignons hachés dans le beurre, puis verser le vin blanc.', 'Ajouter la crème et laisser épaissir 2 minutes.', 'Répartir les noix dans des coquilles, napper de sauce et parsemer de chapelure.', 'Gratiner 8 minutes au four.'] },
+
+  { n: 'Gratin de chou-fleur au jambon', c: 'Plat', k: null, t: 50, m: null, kw: 'gratin, béchamel, chou-fleur',
+    i: ['250 g Chou-fleur', '1 Tranche de jambon|Tranches de jambon', '15 g Beurre', '15 g Farine', '150 ml Lait', '30 g Gruyère râpé', '1 pincée Muscade', 'Sel et poivre'],
+    s: ['Cuire le chou-fleur en bouquets 10 minutes à l’eau salée et bien l’égoutter.', 'Préparer une béchamel : faire fondre le beurre, ajouter la farine, puis le lait en fouettant jusqu’à épaississement.', 'Assaisonner de muscade, sel et poivre.', 'Mettre le chou-fleur et le jambon en lanières dans un plat, napper de béchamel, parsemer de gruyère.', 'Gratiner 20 minutes à 200 °C.'] },
+
+  { n: 'Parmentier de canard', c: 'Plat', k: null, t: 60, m: null, kw: 'canard, gratin, purée, fête',
+    i: ['1 Cuisse de canard confite|Cuisses de canard confites', '250 g Pommes de terre', '60 ml Lait', '10 g Beurre', '0.5 Échalote', '1 cs Chapelure', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre à l’eau 20 minutes et les écraser avec le lait et le beurre.', 'Réchauffer la cuisse, retirer la peau et effilocher la chair.', 'Faire revenir la chair avec l’échalote hachée 5 minutes.', 'Mettre le canard au fond d’un plat, couvrir de purée et de chapelure.', 'Gratiner 20 minutes à 200 °C.'] },
+
+  { n: 'Joue de bœuf au vin rouge', c: 'Plat', k: null, t: 200, m: null, kw: 'bœuf, mijoté, hiver, fondant',
+    i: ['200 g Joue de bœuf', '1 Carotte|Carottes', '0.5 Oignon', '150 ml Vin rouge', '1 cc Farine', '1 cs Huile', 'Bouquet garni', 'Sel et poivre'],
+    s: ['Dorer la joue coupée en gros morceaux dans l’huile, puis la réserver.', 'Faire revenir l’oignon et les carottes en rondelles, saupoudrer de farine.', 'Remettre la viande, verser le vin et un peu d’eau, ajouter le bouquet garni.', 'Couvrir et laisser mijoter 3 heures à feu très doux : la viande doit se couper à la cuillère.'] },
+
+  { n: 'Daube provençale', c: 'Plat', k: null, t: 210, m: null, kw: 'bœuf, provence, mijoté, olives',
+    i: ['200 g Bœuf à braiser', '1 Carotte|Carottes', '0.5 Oignon', '150 ml Vin rouge', '1 Zeste d’orange|Zestes d’orange', '20 g Olives noires', '1 Gousse d’ail', '1 cs Huile d’olive', 'Herbes de Provence', 'Sel et poivre'],
+    s: ['La veille si possible, faire mariner la viande dans le vin avec l’oignon, l’ail, la carotte et les herbes.', 'Égoutter la viande, la dorer dans l’huile d’olive.', 'Remettre la marinade, ajouter le zeste d’orange, couvrir et mijoter 3 heures à feu doux.', 'Ajouter les olives 15 minutes avant la fin. Servir avec des pâtes.'] },
+
+  { n: 'Poule au pot', c: 'Plat', k: null, t: 180, m: null, kw: 'volaille, bouillon, henri IV, hiver',
+    i: ['250 g Poule', '1 Carotte|Carottes', '0.5 Poireau', '0.5 Navet', '0.5 Oignon', '1 Clou de girofle', '50 g Riz', 'Bouquet garni', 'Sel et poivre'],
+    s: ['Mettre la poule dans une grande marmite d’eau froide, porter à ébullition et écumer.', 'Ajouter l’oignon piqué de girofle et le bouquet garni, puis cuire 2 heures à petit frémissement.', 'Ajouter carottes, poireau et navet, puis cuire encore 40 minutes.', 'Cuire le riz dans un peu de bouillon et servir la poule découpée avec légumes et riz.'] },
+
+  { n: 'Lapin chasseur', c: 'Plat', k: null, t: 75, m: null, kw: 'lapin, champignons, vin blanc, mijoté',
+    i: ['250 g Lapin en morceaux', '60 g Champignons de Paris', '1 cc Échalote', '80 g Tomates concassées', '60 ml Vin blanc', '1 cs Huile', 'Thym', 'Sel et poivre'],
+    s: ['Dorer les morceaux de lapin dans l’huile, puis ajouter l’échalote.', 'Verser le vin blanc, ajouter les tomates et le thym.', 'Couvrir et cuire 40 minutes à feu doux.', 'Ajouter les champignons émincés et cuire encore 15 minutes.'] },
+
+  { n: 'Pintade aux choux', c: 'Plat', k: null, t: 100, m: null, kw: 'volaille, chou, hiver, terroir',
+    i: ['250 g Pintade', '200 g Chou vert', '40 g Lardons', '1 Carotte|Carottes', '0.5 Oignon', '10 g Beurre', 'Sel et poivre'],
+    s: ['Blanchir le chou en lanières 5 minutes dans l’eau bouillante.', 'Dorer la pintade dans le beurre, puis la réserver.', 'Faire revenir lardons, oignon et carotte, ajouter le chou.', 'Poser la pintade dessus, couvrir et cuire 1 h 15 à feu doux.'] },
+
+  { n: 'Canard à l’orange', c: 'Plat', k: null, t: 50, m: null, kw: 'canard, fête, sauce sucrée-salée',
+    i: ['1 Magret de canard|Magrets de canard', '1 Orange|Oranges', '1 cc Sucre', '1 cs Vinaigre', '50 ml Bouillon de volaille', '1 cc Maïzena', 'Sel et poivre'],
+    s: ['Quadriller la peau du magret et le cuire 8 minutes côté peau, puis 4 minutes côté chair.', 'Le laisser reposer sous aluminium.', 'Dans une casserole, faire un caramel avec le sucre, ajouter le vinaigre, le jus d’orange et le bouillon.', 'Épaissir avec la maïzena délayée, ajouter des zestes, puis servir le magret tranché nappé de sauce.'] },
+
+  { n: 'Paupiettes de veau', c: 'Plat', k: null, t: 60, m: null, kw: 'veau, mijoté, sauce, classique',
+    i: ['1 Paupiette de veau|Paupiettes de veau', '1 Carotte|Carottes', '0.5 Oignon', '50 ml Vin blanc', '50 g Champignons', '1 cs Huile', 'Sel et poivre'],
+    s: ['Dorer les paupiettes sur toutes les faces dans l’huile.', 'Ajouter l’oignon émincé et les carottes en rondelles, puis le vin blanc et 100 ml d’eau.', 'Couvrir et cuire 40 minutes à feu doux.', 'Ajouter les champignons 15 minutes avant la fin et servir avec du riz ou une purée.'] },
+
+  { n: 'Rôti de veau aux champignons', c: 'Plat', k: null, t: 75, m: null, kw: 'veau, rôti, dimanche',
+    i: ['180 g Rôti de veau', '80 g Champignons', '0.5 Oignon', '50 ml Vin blanc', '10 g Beurre', 'Thym', 'Sel et poivre'],
+    s: ['Dorer le rôti dans le beurre sur toutes ses faces.', 'Ajouter l’oignon et le thym, puis le vin blanc.', 'Couvrir et cuire 45 minutes à feu doux en arrosant de temps en temps.', 'Ajouter les champignons 20 minutes avant la fin, puis trancher le rôti.'] },
+
+  { n: 'Saucisse purée aux oignons', c: 'Plat', k: null, t: 35, m: null, kw: 'enfants, simple, purée',
+    i: ['2 Saucisse|Saucisses', '250 g Pommes de terre', '60 ml Lait', '10 g Beurre', '0.5 Oignon', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre épluchées 20 minutes à l’eau salée.', 'Les écraser avec le lait chaud et le beurre.', 'Cuire les saucisses 15 minutes à la poêle avec l’oignon émincé.', 'Servir la purée avec les saucisses et les oignons fondants.'] },
+
+  { n: 'Crozets aux diots', c: 'Plat', k: null, t: 40, m: null, kw: 'savoie, montagne, pâtes, saucisse',
+    i: ['80 g Crozets', '1 Diot|Diots', '30 ml Crème fraîche', '30 g Beaufort', '0.25 Oignon', '30 ml Vin blanc', 'Sel et poivre'],
+    s: ['Cuire les crozets 15 à 20 minutes dans l’eau salée.', 'Faire revenir l’oignon, ajouter les diots et le vin blanc, puis cuire 20 minutes à couvert.', 'Mélanger les crozets égouttés avec la crème et le beaufort râpé.', 'Servir avec les diots tranchés.'] },
+
+  { n: 'Tourte à la viande', c: 'Plat', k: null, t: 70, m: null, kw: 'pâte feuilletée, four, alsace',
+    i: ['0.25 Pâte feuilletée|Pâtes feuilletées', '120 g Chair à saucisse', '0.25 Oignon', '1 cc Persil', '0.25 Œuf', '1 Tranche de pain de mie|Tranches de pain de mie', '20 ml Lait', 'Sel et poivre'],
+    s: ['Préchauffer le four à 190 °C et tremper le pain dans le lait.', 'Mélanger la viande, l’oignon haché, le persil, le pain essoré et l’œuf.', 'Étaler la moitié de la pâte dans un moule, garnir, couvrir avec le reste de pâte et souder les bords.', 'Dorer à l’œuf, faire une cheminée et cuire 45 minutes.'] },
+
+  { n: 'Fricassée de poulet aux champignons', c: 'Plat', k: null, t: 45, m: null, kw: 'poulet, crème, champignons',
+    i: ['1 Cuisse de poulet|Cuisses de poulet', '80 g Champignons', '0.5 Oignon', '50 ml Vin blanc', '40 ml Crème fraîche', '10 g Beurre', 'Sel et poivre'],
+    s: ['Dorer le poulet dans le beurre, puis ajouter l’oignon.', 'Verser le vin blanc, couvrir et cuire 25 minutes.', 'Ajouter les champignons et cuire 10 minutes.', 'Ajouter la crème, laisser épaissir 3 minutes et servir avec du riz.'] },
+
+  { n: 'Gigot de sept heures', c: 'Plat', k: null, t: 450, m: null, kw: 'agneau, fête, dimanche, confit',
+    i: ['250 g Gigot d’agneau', '3 Gousse d’ail|Gousses d’ail', '1 Carotte|Carottes', '0.5 Oignon', '80 ml Vin blanc', '1 cs Huile d’olive', 'Thym et romarin', 'Sel et poivre'],
+    s: ['Préchauffer le four à 120 °C.', 'Dorer le gigot dans une cocotte avec l’huile.', 'Ajouter l’ail en chemise, les légumes, les herbes, le vin et un verre d’eau.', 'Couvrir et cuire 7 heures au four en arrosant de temps en temps : la viande se sert à la cuillère.'] },
+
+  { n: 'Épaule d’agneau confite', c: 'Plat', k: null, t: 270, m: null, kw: 'agneau, four, fondant',
+    i: ['250 g Épaule d’agneau', '2 Gousse d’ail|Gousses d’ail', '200 g Pommes de terre', '1 cs Huile d’olive', 'Romarin', 'Sel et poivre'],
+    s: ['Préchauffer le four à 150 °C.', 'Frotter l’épaule d’huile, de sel, de poivre et de romarin.', 'La mettre dans un plat avec l’ail et un fond d’eau, couvrir d’aluminium et cuire 3 heures.', 'Ajouter les pommes de terre en quartiers, retirer l’aluminium et cuire encore 1 heure.'] },
+
+  { n: 'Hachis de bœuf aux carottes', c: 'Plat', k: null, t: 50, m: null, kw: 'gratin, purée, enfants',
+    i: ['120 g Bœuf haché', '1 Carotte|Carottes', '200 g Pommes de terre', '60 ml Lait', '10 g Beurre', '0.25 Oignon', '20 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Cuire pommes de terre et carottes à l’eau 20 minutes.', 'Écraser les pommes de terre avec le lait et le beurre ; couper les carottes en dés.', 'Faire revenir la viande avec l’oignon et mélanger avec les carottes.', 'Mettre la viande au fond d’un plat, couvrir de purée et de gruyère, gratiner 20 minutes à 200 °C.'] },
+
+  { n: 'Jambon braisé sauce madère', c: 'Plat', k: null, t: 30, m: null, kw: 'jambon, sauce, fête',
+    i: ['1 Tranche épaisse de jambon|Tranches épaisses de jambon', '40 g Champignons', '30 ml Madère', '30 ml Crème fraîche', '10 g Beurre', '200 g Pommes de terre', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre à la vapeur.', 'Faire revenir les champignons dans le beurre, puis verser le madère.', 'Ajouter la crème et laisser réduire 3 minutes.', 'Réchauffer le jambon dans la sauce 5 minutes et servir.'] },
+
+  { n: 'Quenelles sauce Nantua', c: 'Plat', k: null, t: 40, m: null, kw: 'lyon, poisson, gratin, sauce',
+    i: ['2 Quenelle de brochet|Quenelles de brochet', '15 g Beurre', '15 g Farine', '150 ml Lait', '1 cc Concentré de tomate', '30 g Crevettes décortiquées', '20 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Préchauffer le four à 200 °C.', 'Préparer une béchamel avec beurre, farine et lait, puis ajouter le concentré de tomate et les crevettes.', 'Poser les quenelles dans un plat beurré et les napper de sauce.', 'Parsemer de gruyère et cuire 20 minutes : les quenelles doivent gonfler.'] },
+
+  { n: 'Pot-au-feu de la mer', c: 'Plat', k: null, t: 45, m: null, kw: 'poisson, bouillon, léger',
+    i: ['150 g Poissons blancs', '50 g Crevettes', '1 Carotte|Carottes', '0.5 Poireau', '1 Pomme de terre|Pommes de terre', '0.25 Fenouil', '1 Cube de bouillon', 'Sel et poivre'],
+    s: ['Porter 500 ml d’eau à ébullition avec le cube de bouillon.', 'Ajouter carottes, poireau, fenouil et pommes de terre en morceaux, puis cuire 20 minutes.', 'Ajouter le poisson en gros morceaux et cuire 6 minutes à frémissement.', 'Ajouter les crevettes 2 minutes et servir dans des assiettes creuses.'] },
+
+  { n: 'Truffade', c: 'Plat', k: null, t: 40, m: null, kw: 'auvergne, fromage, pommes de terre',
+    i: ['250 g Pommes de terre', '80 g Tomme fraîche', '30 g Lardons', '1 Gousse d’ail', '1 cs Persil', 'Sel et poivre'],
+    s: ['Couper les pommes de terre en fines rondelles.', 'Les faire dorer 25 minutes à la poêle avec les lardons, en remuant.', 'Ajouter la tomme en lamelles et l’ail haché, puis laisser fondre en mélangeant.', 'Laisser former une croûte dorée dessous, parsemer de persil et servir.'] },
+
+  { n: 'Gratin de crozets', c: 'Plat', k: null, t: 45, m: null, kw: 'savoie, gratin, pâtes',
+    i: ['80 g Crozets', '40 g Lardons', '0.25 Oignon', '50 ml Crème fraîche', '40 g Reblochon', 'Sel et poivre'],
+    s: ['Cuire les crozets 15 minutes dans l’eau salée.', 'Faire revenir les lardons et l’oignon émincé.', 'Mélanger crozets, lardons et crème dans un plat.', 'Poser le reblochon en tranches et gratiner 20 minutes à 200 °C.'] },
+  { n: 'Nems au porc', c: 'Plat', k: null, t: 60, m: null, kw: 'vietnam, asiatique, friture, apéritif',
+    i: ['4 Galette de riz|Galettes de riz', '80 g Porc haché', '20 g Vermicelles de riz', '0.5 Carotte', '2 Champignon noir|Champignons noirs', '0.25 Oignon', '1 cc Sauce nuoc-mâm', '4 Feuille de salade|Feuilles de salade', 'Menthe', 'Huile de friture'],
+    s: ['Réhydrater les vermicelles et les champignons dans l’eau chaude, puis les couper court.', 'Mélanger le porc, la carotte râpée, l’oignon haché, les vermicelles, les champignons et le nuoc-mâm.', 'Humidifier une galette, poser un boudin de farce, rabattre les côtés et rouler serré.', 'Frire les nems 6 à 8 minutes dans l’huile à 170 °C jusqu’à ce qu’ils soient dorés.', 'Servir avec la salade, la menthe et une sauce nuoc-mâm sucrée.'] },
+
+  { n: 'Bo bun au bœuf', c: 'Plat', k: null, t: 35, m: null, kw: 'vietnam, asiatique, bowl, frais',
+    i: ['70 g Vermicelles de riz', '100 g Bœuf', '0.5 Carotte', '0.25 Concombre', '30 g Pousses de soja', '2 Nem|Nems', '1 cs Cacahuètes', 'Menthe et coriandre', '1 cs Sauce nuoc-mâm', '1 cc Sucre', '0.5 Citron vert', '0.25 Oignon'],
+    s: ['Cuire les vermicelles selon le paquet, les rincer à l’eau froide.', 'Mélanger nuoc-mâm, sucre, jus de citron vert et 2 cuillères d’eau pour la sauce.', 'Sauter le bœuf en lamelles avec l’oignon 2 minutes à feu vif.', 'Dans un bol : salade, vermicelles, carotte et concombre en bâtonnets, soja, herbes.', 'Ajouter le bœuf, les nems coupés et les cacahuètes, puis arroser de sauce.'] },
+
+  { n: 'Phở au bœuf', c: 'Plat', k: null, t: 60, m: null, kw: 'vietnam, soupe, bouillon, asiatique',
+    i: ['80 g Nouilles de riz', '100 g Bœuf en fines tranches', '400 ml Bouillon de bœuf', '1 Anis étoilé', '1 Bâton de cannelle|Bâtons de cannelle', '1 cc Gingembre râpé', '0.25 Oignon', '1 cs Sauce nuoc-mâm', '30 g Pousses de soja', 'Coriandre et basilic thaï', '0.5 Citron vert'],
+    s: ['Griller à sec l’oignon et le gingembre coupés en deux, puis les mettre dans le bouillon avec l’anis et la cannelle.', 'Laisser frémir 30 minutes, filtrer et assaisonner de nuoc-mâm.', 'Cuire les nouilles et les répartir dans les bols.', 'Poser le bœuf cru très finement tranché, puis verser le bouillon bouillant dessus : il cuit tout seul.', 'Servir avec soja, herbes et citron vert.'] },
+
+  { n: 'Butter chicken', c: 'Plat', k: null, t: 50, m: null, kw: 'inde, curry, poulet, crème',
+    i: ['150 g Blanc de poulet', '50 g Yaourt nature', '100 g Coulis de tomate', '40 ml Crème', '15 g Beurre', '0.25 Oignon', '1 Gousse d’ail', '1 cc Gingembre râpé', '1 cc Garam masala', '0.5 cc Curcuma', '0.5 cc Paprika', '70 g Riz basmati', 'Sel'],
+    s: ['Mariner le poulet en dés avec le yaourt et la moitié des épices au moins 20 minutes.', 'Dorer le poulet dans la moitié du beurre et le réserver.', 'Faire revenir oignon, ail et gingembre dans le reste du beurre, ajouter les épices restantes et le coulis.', 'Laisser mijoter 10 minutes, ajouter la crème et le poulet, puis cuire 10 minutes.', 'Servir avec le riz basmati.'] },
+
+  { n: 'Tajine d’agneau aux pruneaux', c: 'Plat', k: null, t: 120, m: null, kw: 'maroc, sucré-salé, mijoté, agneau',
+    i: ['180 g Épaule d’agneau', '40 g Pruneaux', '0.5 Oignon', '1 cs Amandes', '1 cc Miel', '0.5 cc Cannelle', '0.5 cc Ras el hanout', '1 pincée Safran', '1 cs Huile d’olive', 'Sel et poivre'],
+    s: ['Dorer l’agneau en morceaux dans l’huile avec l’oignon émincé.', 'Ajouter les épices, couvrir d’eau à mi-hauteur, couvrir et mijoter 1 h 30.', 'Ajouter les pruneaux, le miel et un peu de cannelle, puis cuire encore 20 minutes.', 'Parsemer d’amandes grillées et servir avec de la semoule ou du pain.'] },
+
+  { n: 'Tajine de kefta aux œufs', c: 'Plat', k: null, t: 40, m: null, kw: 'maroc, boulettes, tomate, épices',
+    i: ['120 g Bœuf haché', '1 Œuf|Œufs', '150 g Tomates concassées', '0.25 Oignon', '1 Gousse d’ail', '0.5 cc Cumin', '0.5 cc Paprika', '1 cs Coriandre', '1 cs Huile d’olive', 'Sel et poivre'],
+    s: ['Mélanger la viande avec la moitié du cumin, du paprika et de la coriandre, puis former de petites boulettes.', 'Faire revenir l’oignon et l’ail dans l’huile, ajouter les tomates et le reste des épices.', 'Déposer les boulettes dans la sauce, couvrir et cuire 20 minutes.', 'Casser les œufs par-dessus et cuire à couvert 5 minutes. Servir avec du pain.'] },
+
+  { n: 'Kebab maison', c: 'Plat', k: null, t: 35, m: null, kw: 'street food, sandwich, poulet, enfants',
+    i: ['130 g Blanc de poulet', '1 Pain pita|Pains pita', '40 g Yaourt grec', '0.5 Tomate', '0.25 Oignon rouge', '2 Feuille de salade|Feuilles de salade', '1 cc Épices kebab', '0.5 Gousse d’ail', '1 cs Huile d’olive', 'Sel'],
+    s: ['Mariner le poulet en fines lanières avec l’huile, les épices et le sel 15 minutes.', 'Mélanger le yaourt avec l’ail râpé et un peu de sel pour la sauce blanche.', 'Saisir le poulet 6 à 8 minutes dans une poêle très chaude.', 'Garnir le pain chaud de salade, tomate, oignon, poulet et sauce.'] },
+
+  { n: 'Poulet korma', c: 'Plat', k: null, t: 45, m: null, kw: 'inde, curry doux, amandes',
+    i: ['150 g Blanc de poulet', '0.25 Oignon', '1 Gousse d’ail', '1 cs Poudre d’amandes', '60 ml Lait de coco', '40 g Yaourt nature', '1 cc Curry doux', '0.5 cc Garam masala', '1 cs Huile', '70 g Riz basmati', 'Sel'],
+    s: ['Faire revenir l’oignon et l’ail dans l’huile, ajouter les épices 1 minute.', 'Ajouter le poulet en dés et le dorer.', 'Verser le lait de coco et la poudre d’amandes, puis cuire 15 minutes à feu doux.', 'Hors du feu, ajouter le yaourt et servir avec le riz.'] },
+
+  { n: 'Poulet aigre-doux', c: 'Plat', k: null, t: 30, m: null, kw: 'chine, asiatique, ananas, sucré-salé',
+    i: ['130 g Blanc de poulet', '0.5 Poivron', '50 g Ananas', '1 cs Ketchup', '1 cs Vinaigre de riz', '1 cc Sucre', '1 cs Sauce soja', '1 cc Maïzena', '1 cs Huile', '70 g Riz'],
+    s: ['Cuire le riz.', 'Mélanger ketchup, vinaigre, sucre, soja, maïzena et 3 cuillères d’eau.', 'Sauter le poulet en dés dans l’huile 5 minutes, ajouter le poivron 3 minutes.', 'Ajouter l’ananas et la sauce, laisser épaissir 1 minute et servir avec le riz.'] },
+
+  { n: 'Bibimbap', c: 'Plat', k: null, t: 40, m: null, kw: 'corée, bowl, riz, œuf',
+    i: ['80 g Riz', '80 g Bœuf haché', '0.5 Carotte', '40 g Épinards', '30 g Pousses de soja', '0.25 Courgette', '1 Œuf|Œufs', '1 cs Sauce soja', '1 cc Huile de sésame', '1 cc Pâte de piment gochujang', '1 cc Graines de sésame'],
+    s: ['Cuire le riz.', 'Faire sauter séparément la carotte en bâtonnets, la courgette, les épinards et le soja avec un peu d’huile de sésame.', 'Cuire la viande avec la sauce soja.', 'Cuire l’œuf au plat en gardant le jaune coulant.', 'Disposer le riz, les légumes en secteurs, la viande et l’œuf ; ajouter le gochujang et les graines de sésame, puis mélanger au moment de manger.'] },
+
+  { n: 'Ramen au porc', c: 'Plat', k: null, t: 45, m: null, kw: 'japon, soupe, nouilles, bouillon',
+    i: ['90 g Nouilles ramen', '100 g Poitrine de porc', '400 ml Bouillon de volaille', '1 cs Sauce soja', '1 cc Miso', '1 Œuf|Œufs', '1 Oignon nouveau|Oignons nouveaux', '20 g Maïs', '1 cc Gingembre râpé', '1 Gousse d’ail'],
+    s: ['Cuire l’œuf 6 minutes 30, le passer à l’eau froide et l’écaler.', 'Chauffer le bouillon avec l’ail, le gingembre, la sauce soja et le miso.', 'Dorer la poitrine en tranches à la poêle.', 'Cuire les nouilles, les mettre dans un bol et verser le bouillon.', 'Ajouter le porc, l’œuf coupé en deux, le maïs et l’oignon nouveau.'] },
+
+  { n: 'Poulet katsu curry', c: 'Plat', k: null, t: 45, m: null, kw: 'japon, pané, curry, riz',
+    i: ['130 g Blanc de poulet', '1 cs Farine', '0.5 Œuf', '30 g Chapelure panko', '0.5 Carotte', '0.25 Oignon', '1 Pomme de terre|Pommes de terre', '1 cc Curry', '200 ml Bouillon', '1 cc Maïzena', '80 g Riz', 'Huile'],
+    s: ['Faire revenir oignon, carotte et pomme de terre en dés, ajouter le curry puis le bouillon ; cuire 20 minutes.', 'Épaissir la sauce avec la maïzena délayée.', 'Aplatir le poulet, le passer dans farine, œuf battu puis panko.', 'Le frire à la poêle 4 minutes par face dans un fond d’huile, puis le trancher.', 'Servir avec le riz et la sauce curry.'] },
+
+  { n: 'Poulet au gingembre et sésame', c: 'Plat', k: null, t: 25, m: null, kw: 'asiatique, wok, rapide',
+    i: ['130 g Blanc de poulet', '1 cc Gingembre râpé', '1 Gousse d’ail', '1 cs Sauce soja', '1 cc Miel', '1 cc Huile de sésame', '1 cc Graines de sésame', '80 g Brocoli', '70 g Riz'],
+    s: ['Cuire le riz et le brocoli en petits bouquets.', 'Sauter le poulet en dés dans l’huile de sésame 5 minutes.', 'Ajouter gingembre et ail râpés, puis soja et miel ; laisser caraméliser 2 minutes.', 'Ajouter le brocoli, parsemer de sésame et servir avec le riz.'] },
+
+  { n: 'Tacos mexicains au bœuf', c: 'Plat', k: null, t: 30, m: null, kw: 'mexique, tortilla, épicé',
+    i: ['3 Petite tortilla de maïs|Petites tortillas de maïs', '120 g Bœuf haché', '0.5 Tomate', '0.25 Oignon rouge', '0.25 Avocat', '0.5 Citron vert', '1 cc Épices tex-mex', 'Coriandre', 'Sel'],
+    s: ['Cuire la viande avec les épices et un peu de sel 8 minutes.', 'Préparer une salsa avec tomate, oignon et coriandre hachés et le jus de citron vert.', 'Chauffer les tortillas à sec dans la poêle.', 'Garnir de viande, de salsa et de tranches d’avocat.'] },
+
+  { n: 'Burritos au poulet', c: 'Plat', k: null, t: 35, m: null, kw: 'mexique, wrap, haricots rouges',
+    i: ['1 Grande tortilla|Grandes tortillas', '100 g Blanc de poulet', '50 g Haricots rouges', '40 g Riz cuit', '20 g Cheddar râpé', '1 cs Crème fraîche', '1 cs Salsa', '1 cc Épices tex-mex'],
+    s: ['Cuire le poulet en lanières avec les épices.', 'Réchauffer les haricots rouges égouttés.', 'Garnir la tortilla de riz, haricots, poulet, cheddar, salsa et crème.', 'Rouler en repliant les bords, puis dorer 2 minutes par face à la poêle.'] },
+
+  { n: 'Enchiladas au poulet', c: 'Plat', k: null, t: 45, m: null, kw: 'mexique, gratin, tortilla, fromage',
+    i: ['2 Tortilla|Tortillas', '100 g Blanc de poulet cuit', '150 g Coulis de tomate', '30 g Cheddar râpé', '30 g Maïs', '1 cc Épices tex-mex', '0.25 Oignon'],
+    s: ['Préchauffer le four à 200 °C.', 'Mélanger le coulis avec les épices et l’oignon haché.', 'Effilocher le poulet, le mélanger avec le maïs et un peu de sauce.', 'Garnir et rouler les tortillas, les poser dans un plat, couvrir de sauce et de cheddar.', 'Gratiner 20 minutes.'] },
+
+  { n: 'Chakchouka aux merguez', c: 'Plat', k: null, t: 35, m: null, kw: 'maghreb, œufs, poivrons, épicé',
+    i: ['1 Merguez|Merguez', '1 Poivron|Poivrons', '150 g Tomates concassées', '0.25 Oignon', '1 Gousse d’ail', '1 Œuf|Œufs', '0.5 cc Cumin', '1 cs Huile d’olive', 'Sel'],
+    s: ['Dorer les merguez en tronçons et les réserver.', 'Faire fondre l’oignon, l’ail et le poivron en lanières dans l’huile 10 minutes.', 'Ajouter tomates et cumin, puis cuire 10 minutes.', 'Remettre les merguez, faire des puits, casser les œufs et cuire à couvert 5 minutes.'] },
+
+  { n: 'Moussaka grecque à l’agneau', c: 'Plat', k: null, t: 90, m: null, kw: 'grèce, aubergines, gratin, béchamel',
+    i: ['1 Aubergine|Aubergines', '120 g Agneau haché', '100 g Tomates concassées', '0.25 Oignon', '0.5 cc Cannelle', '15 g Beurre', '15 g Farine', '150 ml Lait', '20 g Parmesan', '1 cs Huile d’olive', 'Sel et poivre'],
+    s: ['Couper l’aubergine en tranches, les huiler et les rôtir 20 minutes à 200 °C.', 'Cuire la viande avec l’oignon, les tomates et la cannelle 15 minutes.', 'Préparer une béchamel avec beurre, farine et lait.', 'Alterner aubergines et viande dans un plat, finir par la béchamel et le parmesan.', 'Cuire 35 minutes à 180 °C.'] },
+
+  { n: 'Souvlaki de porc et tzatziki', c: 'Plat', k: null, t: 40, m: null, kw: 'grèce, brochettes, barbecue',
+    i: ['130 g Échine de porc', '1 cs Huile d’olive', '0.5 Citron', '1 cc Origan', '1 Gousse d’ail', '60 g Yaourt grec', '0.25 Concombre', '1 Pain pita|Pains pita', 'Sel et poivre'],
+    s: ['Mariner le porc en cubes avec l’huile, le citron, l’origan et l’ail 20 minutes.', 'Râper le concombre, l’essorer et le mélanger au yaourt avec sel et un peu d’ail : c’est le tzatziki.', 'Enfiler la viande sur des brochettes et la griller 10 à 12 minutes.', 'Servir avec la pita chaude et le tzatziki.'] },
+
+  { n: 'Goulash hongrois', c: 'Plat', k: null, t: 120, m: null, kw: 'hongrie, bœuf, paprika, mijoté',
+    i: ['180 g Bœuf à braiser', '0.5 Oignon', '1 Poivron|Poivrons', '1 Pomme de terre|Pommes de terre', '1 cs Paprika', '100 g Tomates concassées', '0.5 cc Cumin', '1 cs Huile', 'Sel et poivre'],
+    s: ['Faire fondre l’oignon dans l’huile, ajouter la viande en cubes et la dorer.', 'Hors du feu, ajouter le paprika et le cumin, mélanger.', 'Ajouter tomates et 300 ml d’eau, couvrir et mijoter 1 h 15.', 'Ajouter poivron et pommes de terre en dés, puis cuire encore 30 minutes.'] },
+
+  { n: 'Saltimbocca de veau', c: 'Plat', k: null, t: 20, m: null, kw: 'italie, veau, jambon cru, sauge',
+    i: ['2 Petite escalope de veau|Petites escalopes de veau', '2 Tranche de jambon cru|Tranches de jambon cru', '2 Feuille de sauge|Feuilles de sauge', '30 ml Vin blanc', '10 g Beurre', 'Poivre'],
+    s: ['Poser sur chaque escalope une feuille de sauge et une tranche de jambon, et fixer avec une pique.', 'Cuire 2 minutes côté jambon puis 1 minute de l’autre côté dans le beurre.', 'Retirer la viande, verser le vin blanc dans la poêle et gratter les sucs.', 'Napper la viande de ce jus et servir avec des pâtes ou des légumes.'] },
+
+  { n: 'Spaghetti alle vongole', c: 'Plat', k: null, t: 25, m: null, kw: 'italie, palourdes, fruits de mer, pâtes',
+    i: ['100 g Spaghetti', '200 g Palourdes', '1 Gousse d’ail', '30 ml Vin blanc', '1 cs Huile d’olive', '1 pincée Piment', '1 cs Persil'],
+    s: ['Faire dégorger les palourdes 30 minutes dans l’eau salée.', 'Cuire les spaghetti al dente.', 'Faire revenir l’ail et le piment dans l’huile, ajouter les palourdes et le vin, couvrir 3 minutes : elles s’ouvrent.', 'Ajouter les pâtes égouttées, mélanger 1 minute et parsemer de persil.'] },
+
+  { n: 'Pâtes cacio e pepe', c: 'Végétarien', k: null, t: 15, m: null, kw: 'italie, fromage, rapide, pâtes',
+    i: ['100 g Spaghetti', '35 g Pecorino râpé', '1 cc Poivre concassé'],
+    s: ['Cuire les pâtes dans peu d’eau salée et garder une louche d’eau de cuisson.', 'Griller le poivre à sec 1 minute dans une grande poêle, ajouter un peu d’eau de cuisson.', 'Ajouter les pâtes égouttées, hors du feu, puis le pecorino petit à petit en mélangeant vivement.', 'Ajuster avec un peu d’eau de cuisson pour obtenir une sauce crémeuse.'] },
+
+  { n: 'Pâtes alla norma', c: 'Végétarien', k: null, t: 35, m: null, kw: 'italie, sicile, aubergine, tomate',
+    i: ['100 g Pâtes', '0.5 Aubergine', '150 g Tomates concassées', '1 Gousse d’ail', '2 cs Huile d’olive', '20 g Ricotta salée ou parmesan', 'Basilic', 'Sel'],
+    s: ['Couper l’aubergine en dés et la dorer 10 minutes dans l’huile.', 'Ajouter l’ail et les tomates, puis cuire 15 minutes.', 'Cuire les pâtes et les mélanger à la sauce.', 'Servir avec le fromage râpé et le basilic.'] },
+
+  { n: 'Risotto au poulet et parmesan', c: 'Plat', k: null, t: 40, m: null, kw: 'italie, riz, crémeux',
+    i: ['80 g Riz arborio', '100 g Blanc de poulet', '0.25 Oignon', '30 ml Vin blanc', '300 ml Bouillon de volaille', '20 g Parmesan', '10 g Beurre'],
+    s: ['Dorer le poulet en dés et le réserver.', 'Faire revenir l’oignon dans le beurre, ajouter le riz et le nacrer 2 minutes.', 'Verser le vin, puis le bouillon chaud louche par louche en remuant pendant 18 minutes.', 'Ajouter le poulet et le parmesan hors du feu, couvrir 2 minutes et servir.'] },
+
+  { n: 'Arancini', c: 'Plat', k: null, t: 60, m: null, kw: 'italie, sicile, riz, friture, apéritif',
+    i: ['100 g Riz arborio cuit en risotto', '20 g Mozzarella', '20 g Parmesan', '0.5 Œuf', '30 g Chapelure', 'Huile de friture'],
+    s: ['Mélanger le risotto froid avec le parmesan.', 'Former des boules, mettre un dé de mozzarella au centre et refermer.', 'Les passer dans l’œuf battu puis dans la chapelure.', 'Frire 4 minutes dans l’huile à 175 °C et égoutter.'] },
+
+  { n: 'Gnocchis à la sauce gorgonzola', c: 'Végétarien', k: null, t: 15, m: null, kw: 'italie, fromage, rapide',
+    i: ['200 g Gnocchis', '40 g Gorgonzola', '50 ml Crème', '1 cs Noix', 'Poivre'],
+    s: ['Cuire les gnocchis jusqu’à ce qu’ils remontent à la surface.', 'Faire fondre le gorgonzola dans la crème à feu doux.', 'Ajouter les gnocchis égouttés et mélanger.', 'Parsemer de noix concassées et poivrer.'] },
+
+  { n: 'Pizza margherita', c: 'Végétarien', k: null, t: 90, m: null, kw: 'italie, pizza, tomate, mozzarella',
+    i: ['100 g Farine', '2 g Levure de boulanger', '60 ml Eau tiède', '1 cs Huile d’olive', '80 g Coulis de tomate', '60 g Mozzarella', 'Basilic', 'Sel'],
+    s: ['Mélanger farine, levure, eau, sel et huile, puis pétrir 5 minutes.', 'Laisser lever 1 heure sous un torchon.', 'Préchauffer le four au maximum, étaler la pâte finement.', 'Étaler le coulis, ajouter la mozzarella en morceaux et cuire 10 minutes.', 'Ajouter le basilic frais à la sortie du four.'] },
+
+  { n: 'Calzone jambon champignons', c: 'Plat', k: null, t: 90, m: null, kw: 'italie, pizza, chausson',
+    i: ['100 g Farine', '2 g Levure de boulanger', '60 ml Eau tiède', '1 cs Huile d’olive', '50 g Coulis de tomate', '1 Tranche de jambon|Tranches de jambon', '40 g Champignons', '50 g Mozzarella', 'Sel'],
+    s: ['Préparer une pâte à pizza et la laisser lever 1 heure.', 'Préchauffer le four à 240 °C et étaler la pâte en disque.', 'Garnir une moitié de coulis, jambon, champignons et mozzarella.', 'Replier, souder les bords et cuire 15 minutes.'] },
+
+  { n: 'Poulet tandoori', c: 'Plat', k: null, t: 50, m: null, kw: 'inde, four, épices, yaourt',
+    i: ['1 Cuisse de poulet|Cuisses de poulet', '60 g Yaourt nature', '1 cc Épices tandoori', '0.5 Citron', '1 Gousse d’ail', '70 g Riz basmati', 'Sel'],
+    s: ['Entailler la viande et la mariner dans le yaourt, les épices, l’ail et le citron au moins 1 heure.', 'Préchauffer le four à 220 °C.', 'Cuire le poulet 35 minutes en le retournant à mi-cuisson.', 'Servir avec le riz basmati et du citron.'] },
+
+  { n: 'Biryani au poulet', c: 'Plat', k: null, t: 60, m: null, kw: 'inde, riz, épices',
+    i: ['80 g Riz basmati', '120 g Poulet', '0.5 Oignon', '40 g Yaourt', '1 cc Garam masala', '0.5 cc Curcuma', '1 Gousse d’ail', '1 cs Huile', '1 cs Raisins secs', 'Coriandre', 'Sel'],
+    s: ['Mariner le poulet en morceaux dans le yaourt, l’ail et les épices 20 minutes.', 'Faire dorer l’oignon émincé dans l’huile, ajouter le poulet et cuire 10 minutes.', 'Ajouter le riz rincé, les raisins et 180 ml d’eau, saler.', 'Couvrir et cuire 15 minutes à feu doux, puis laisser reposer 5 minutes et parsemer de coriandre.'] },
+
+  { n: 'Curry vert thaï au poulet', c: 'Plat', k: null, t: 30, m: null, kw: 'thaïlande, lait de coco, épicé',
+    i: ['130 g Blanc de poulet', '1 cc Pâte de curry vert', '120 ml Lait de coco', '50 g Haricots verts', '0.25 Courgette', '1 cc Sauce nuoc-mâm', 'Basilic thaï', '70 g Riz jasmin'],
+    s: ['Cuire le riz.', 'Faire chauffer la pâte de curry avec un peu de lait de coco 1 minute.', 'Ajouter le poulet en lamelles, puis le reste du lait de coco et les légumes.', 'Cuire 10 minutes, assaisonner de nuoc-mâm et ajouter le basilic.'] },
+
+  { n: 'Riz frit thaï aux crevettes', c: 'Rapide', k: null, t: 20, m: null, kw: 'thaïlande, wok, riz, restes',
+    i: ['150 g Riz cuit froid', '80 g Crevettes', '1 Œuf|Œufs', '0.25 Oignon', '30 g Petits pois', '1 cs Sauce soja', '1 cc Sauce nuoc-mâm', '1 cs Huile', '0.5 Citron vert'],
+    s: ['Faire revenir l’oignon dans l’huile, ajouter les crevettes 2 minutes.', 'Pousser sur le côté, brouiller l’œuf dans le wok.', 'Ajouter le riz et les petits pois, puis sauter 4 minutes à feu vif.', 'Assaisonner de soja et de nuoc-mâm, servir avec le citron vert.'] },
+
+  { n: 'Feijoada simplifiée', c: 'Plat', k: null, t: 120, m: null, kw: 'brésil, haricots noirs, porc, mijoté',
+    i: ['80 g Haricots noirs secs', '80 g Échine de porc', '1 Saucisse fumée|Saucisses fumées', '30 g Lardons', '0.25 Oignon', '1 Gousse d’ail', '1 Feuille de laurier', '60 g Riz', 'Sel et poivre'],
+    s: ['Faire tremper les haricots une nuit.', 'Dorer lardons, porc en cubes, oignon et ail.', 'Ajouter les haricots, le laurier et de l’eau à hauteur ; mijoter 1 h 30.', 'Ajouter la saucisse en rondelles 20 minutes avant la fin. Servir avec du riz.'] },
+
+  { n: 'Poulet jerk à la jamaïcaine', c: 'Plat', k: null, t: 50, m: null, kw: 'jamaïque, épicé, four',
+    i: ['1 Cuisse de poulet|Cuisses de poulet', '1 cc Épices jerk', '1 cc Sauce soja', '0.5 Citron vert', '1 cc Sucre roux', '1 cs Huile', '60 g Riz', '30 g Haricots rouges'],
+    s: ['Mariner le poulet avec les épices, la sauce soja, le citron vert, le sucre et l’huile 1 heure.', 'Cuire 35 minutes au four à 210 °C.', 'Cuire le riz avec les haricots rouges égouttés.', 'Servir le poulet avec le riz aux haricots.'] },
+
+  { n: 'Accras de morue', c: 'Apéritif', k: null, t: 45, m: null, kw: 'antilles, beignets, poisson, friture',
+    i: ['60 g Morue dessalée', '40 g Farine', '0.5 Œuf', '50 ml Eau', '1 cc Persil', '0.5 Gousse d’ail', '1 pincée Piment', '1 g Levure chimique', 'Huile de friture'],
+    s: ['Pocher la morue 10 minutes, l’égoutter et l’effilocher.', 'Mélanger farine, levure, œuf et eau pour une pâte épaisse.', 'Ajouter la morue, l’ail, le persil et le piment.', 'Frire des petites cuillères de pâte 3 minutes dans l’huile chaude et égoutter.'] },
+
+  { n: 'Couscous royal', c: 'Plat', k: null, t: 100, m: null, kw: 'maghreb, semoule, agneau, merguez',
+    i: ['80 g Semoule', '80 g Épaule d’agneau', '1 Merguez|Merguez', '1 Pilon de poulet|Pilons de poulet', '1 Carotte|Carottes', '0.5 Courgette', '0.5 Navet', '40 g Pois chiches', '1 cc Ras el hanout', '1 cs Concentré de tomate', '10 g Beurre', 'Sel et poivre'],
+    s: ['Dorer l’agneau et le poulet dans une marmite, ajouter le concentré, les épices et 600 ml d’eau.', 'Mijoter 45 minutes, puis ajouter carottes et navet.', 'Après 15 minutes, ajouter courgette et pois chiches et cuire encore 15 minutes.', 'Griller les merguez à part et préparer la semoule avec de l’eau bouillante et le beurre.', 'Servir la semoule avec viandes, légumes et bouillon.'] },
+
+  { n: 'Pastilla au poulet', c: 'Plat', k: null, t: 90, m: null, kw: 'maroc, sucré-salé, feuilles de brick, fête',
+    i: ['3 Feuille de brick|Feuilles de brick', '120 g Poulet', '0.25 Oignon', '1 Œuf|Œufs', '20 g Amandes', '1 cc Sucre glace', '0.5 cc Cannelle', '1 pincée Safran', '15 g Beurre', 'Coriandre', 'Sel'],
+    s: ['Cuire le poulet avec l’oignon, le safran et un peu d’eau 30 minutes, puis l’effilocher.', 'Faire réduire le jus, y cuire l’œuf battu en brouillade.', 'Concasser les amandes grillées avec sucre et cannelle.', 'Superposer les feuilles beurrées, garnir de poulet, d’œufs et d’amandes, puis refermer.', 'Cuire 20 minutes à 190 °C et saupoudrer de sucre glace et de cannelle.'] },
+
+  { n: 'Gyozas au porc', c: 'Apéritif', k: null, t: 50, m: null, kw: 'japon, raviolis, asiatique',
+    i: ['8 Feuille à gyoza|Feuilles à gyoza', '80 g Porc haché', '30 g Chou chinois', '1 Oignon nouveau', '1 cc Gingembre râpé', '1 cc Sauce soja', '1 cc Huile de sésame', '1 cs Huile'],
+    s: ['Mélanger le porc, le chou haché, l’oignon, le gingembre, la soja et l’huile de sésame.', 'Mettre une cuillère de farce sur chaque feuille, humidifier le bord et plisser pour fermer.', 'Dorer les gyozas 2 minutes dans l’huile, côté plat en bas.', 'Ajouter 50 ml d’eau, couvrir et cuire 6 minutes jusqu’à évaporation. Servir avec de la sauce soja.'] },
+  { n: 'Velouté de brocoli', c: 'Léger', k: null, t: 30, m: null, kw: 'soupe, légumes verts, hiver',
+    i: ['200 g Brocoli', '1 Pomme de terre|Pommes de terre', '0.25 Oignon', '300 ml Bouillon de légumes', '1 cs Crème fraîche', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon dans une casserole avec un filet d’huile.', 'Ajouter le brocoli en bouquets, la pomme de terre en dés et le bouillon.', 'Cuire 20 minutes, puis mixer.', 'Ajouter la crème, saler et poivrer.'] },
+
+  { n: 'Velouté de chou-fleur', c: 'Léger', k: null, t: 30, m: null, kw: 'soupe, hiver, doux',
+    i: ['250 g Chou-fleur', '0.25 Oignon', '300 ml Bouillon de légumes', '50 ml Lait', '1 pincée Muscade', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon.', 'Ajouter le chou-fleur et le bouillon, puis cuire 20 minutes.', 'Mixer avec le lait jusqu’à obtenir un velouté lisse.', 'Assaisonner de muscade, sel et poivre.'] },
+
+  { n: 'Soupe de petits pois à la menthe', c: 'Léger', k: null, t: 25, m: null, kw: 'soupe, printemps, frais',
+    i: ['150 g Petits pois', '0.25 Oignon', '250 ml Bouillon de légumes', '4 Feuille de menthe|Feuilles de menthe', '1 cs Crème fraîche', 'Sel et poivre'],
+    s: ['Faire fondre l’oignon dans un filet d’huile.', 'Ajouter les petits pois et le bouillon, puis cuire 12 minutes.', 'Mixer avec la menthe.', 'Servir chaud ou froid avec un trait de crème.'] },
+
+  { n: 'Soupe chinoise aux nouilles et poulet', c: 'Léger', k: null, t: 25, m: null, kw: 'soupe, asiatique, bouillon',
+    i: ['40 g Nouilles chinoises', '80 g Blanc de poulet', '350 ml Bouillon de volaille', '1 cs Sauce soja', '0.5 Carotte', '2 Champignon|Champignons', '1 Oignon nouveau', '1 cc Gingembre râpé'],
+    s: ['Chauffer le bouillon avec le gingembre et la sauce soja.', 'Ajouter le poulet en fines lamelles, la carotte en julienne et les champignons émincés.', 'Cuire 8 minutes, puis ajouter les nouilles 3 minutes.', 'Parsemer d’oignon nouveau.'] },
+
+  { n: 'Soupe miso', c: 'Léger', k: null, t: 15, m: null, kw: 'japon, soupe, tofu, rapide',
+    i: ['1 cs Pâte miso', '300 ml Eau', '50 g Tofu', '1 cs Algues wakame', '1 Oignon nouveau'],
+    s: ['Faire tremper les algues 5 minutes dans l’eau.', 'Chauffer l’eau sans la faire bouillir.', 'Délayer le miso dans un peu d’eau chaude, puis l’ajouter.', 'Ajouter le tofu en dés, les algues et l’oignon nouveau émincé.'] },
+
+  { n: 'Soupe de poisson', c: 'Léger', k: null, t: 50, m: null, kw: 'poisson, provence, soupe',
+    i: ['150 g Poisson blanc', '0.25 Oignon', '0.5 Poireau', '1 Tomate|Tomates', '1 Gousse d’ail', '1 pincée Safran', '1 cs Huile d’olive', '1 Tranche de pain|Tranches de pain', '10 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Faire revenir oignon, poireau et ail dans l’huile.', 'Ajouter tomate, safran, poisson et 400 ml d’eau.', 'Cuire 25 minutes, mixer et passer au chinois.', 'Servir avec le pain grillé frotté d’ail et le gruyère.'] },
+
+  { n: 'Soupe de tomates', c: 'Léger', k: null, t: 30, m: null, kw: 'soupe, tomate, été',
+    i: ['300 g Tomates', '0.25 Oignon', '1 Gousse d’ail', '200 ml Bouillon de légumes', '1 cs Huile d’olive', 'Basilic', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon et l’ail dans l’huile.', 'Ajouter les tomates en morceaux et le bouillon.', 'Cuire 20 minutes, puis mixer.', 'Ajouter le basilic, saler et poivrer.'] },
+
+  { n: 'Soupe de courgettes au fromage frais', c: 'Léger', k: null, t: 25, m: null, kw: 'soupe, été, enfants',
+    i: ['250 g Courgettes', '0.25 Oignon', '250 ml Bouillon de légumes', '1 Portion de fromage frais|Portions de fromage frais', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon.', 'Ajouter les courgettes en rondelles et le bouillon.', 'Cuire 15 minutes.', 'Mixer avec le fromage frais, saler et poivrer.'] },
+
+  { n: 'Soupe de pois cassés', c: 'Léger', k: null, t: 70, m: null, kw: 'soupe, légumineuses, hiver',
+    i: ['70 g Pois cassés', '0.5 Carotte', '0.25 Oignon', '20 g Lardons', '400 ml Eau', 'Sel et poivre'],
+    s: ['Rincer les pois cassés.', 'Faire revenir oignon et lardons, ajouter la carotte, les pois et l’eau.', 'Cuire 1 heure à frémissement.', 'Mixer et assaisonner.'] },
+
+  { n: 'Salade de carottes râpées', c: 'Léger', k: null, t: 10, m: null, kw: 'crudités, entrée, enfants',
+    i: ['150 g Carottes', '0.5 Citron', '1 cs Huile d’olive', '1 cc Persil', 'Sel et poivre'],
+    s: ['Éplucher et râper les carottes.', 'Mélanger le jus de citron, l’huile, le sel et le poivre.', 'Verser sur les carottes et mélanger.', 'Parsemer de persil.'] },
+
+  { n: 'Céleri rémoulade', c: 'Léger', k: null, t: 15, m: null, kw: 'crudités, entrée, bistrot',
+    i: ['120 g Céleri-rave', '1 cs Mayonnaise', '1 cc Moutarde', '0.25 Citron', 'Sel et poivre'],
+    s: ['Éplucher le céleri et le râper finement.', 'L’arroser de jus de citron pour qu’il ne noircisse pas.', 'Mélanger mayonnaise et moutarde.', 'Ajouter au céleri, saler, poivrer et garder au frais.'] },
+
+  { n: 'Salade piémontaise', c: 'Léger', k: null, t: 30, m: null, kw: 'salade, pommes de terre, été',
+    i: ['200 g Pommes de terre', '1 Œuf|Œufs', '1 Tomate|Tomates', '1 Tranche de jambon|Tranches de jambon', '3 Cornichon|Cornichons', '1 cs Mayonnaise', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre 20 minutes et l’œuf 10 minutes.', 'Couper pommes de terre, œuf, tomate, jambon et cornichons en dés.', 'Mélanger avec la mayonnaise.', 'Saler, poivrer et servir frais.'] },
+
+  { n: 'Salade de concombre au yaourt', c: 'Léger', k: null, t: 10, m: null, kw: 'crudités, frais, été',
+    i: ['0.5 Concombre', '50 g Yaourt nature', '1 cc Aneth ou menthe', 'Sel et poivre'],
+    s: ['Couper le concombre en fines rondelles.', 'Saler et laisser dégorger 10 minutes, puis égoutter.', 'Mélanger avec le yaourt et les herbes.', 'Poivrer et servir frais.'] },
+
+  { n: 'Salade de tomates mozzarella', c: 'Léger', k: null, t: 10, m: null, kw: 'italie, caprese, été, rapide',
+    i: ['2 Tomate|Tomates', '60 g Mozzarella', '1 cs Huile d’olive', 'Basilic', 'Sel et poivre'],
+    s: ['Couper tomates et mozzarella en tranches.', 'Les alterner dans l’assiette.', 'Arroser d’huile d’olive et ajouter le basilic.', 'Saler et poivrer.'] },
+
+  { n: 'Salade lyonnaise', c: 'Léger', k: null, t: 20, m: null, kw: 'lyon, œuf poché, lardons',
+    i: ['60 g Frisée', '40 g Lardons', '1 Œuf|Œufs', '1 Tranche de pain|Tranches de pain', '1 cs Huile', '1 cc Vinaigre', '1 cc Moutarde', 'Sel et poivre'],
+    s: ['Préparer une vinaigrette avec moutarde, vinaigre, huile, sel et poivre.', 'Dorer les lardons et le pain en croûtons.', 'Pocher l’œuf 3 minutes dans l’eau frémissante vinaigrée.', 'Mélanger la frisée avec la vinaigrette, ajouter lardons, croûtons et l’œuf.'] },
+
+  { n: 'Salade de quinoa et avocat', c: 'Léger', k: null, t: 25, m: null, kw: 'bowl, végétarien, frais',
+    i: ['50 g Quinoa', '0.5 Avocat', '0.5 Tomate', '0.25 Concombre', '0.5 Citron', '1 cs Huile d’olive', 'Sel et poivre'],
+    s: ['Cuire le quinoa 12 minutes, l’égoutter et le laisser refroidir.', 'Couper avocat, tomate et concombre en dés.', 'Mélanger le tout avec citron, huile, sel et poivre.', 'Servir frais.'] },
+
+  { n: 'Salade de pois chiches', c: 'Léger', k: null, t: 10, m: null, kw: 'légumineuses, végétarien, rapide',
+    i: ['120 g Pois chiches cuits', '0.5 Tomate', '0.25 Oignon rouge', '0.25 Poivron', '1 cs Persil', '0.5 Citron', '1 cs Huile d’olive', '0.5 cc Cumin', 'Sel'],
+    s: ['Rincer et égoutter les pois chiches.', 'Couper tomate, oignon et poivron en petits dés.', 'Mélanger avec persil, citron, huile, cumin et sel.', 'Laisser reposer 10 minutes au frais.'] },
+
+  { n: 'Salade de betteraves', c: 'Léger', k: null, t: 10, m: null, kw: 'crudités, entrée, hiver',
+    i: ['150 g Betterave cuite', '0.25 Échalote', '1 cs Huile', '1 cc Vinaigre', '1 cc Persil', 'Sel et poivre'],
+    s: ['Couper la betterave en dés.', 'Hacher l’échalote.', 'Préparer la vinaigrette avec huile, vinaigre, sel et poivre.', 'Mélanger le tout et parsemer de persil.'] },
+
+  { n: 'Salade de chou coleslaw', c: 'Léger', k: null, t: 15, m: null, kw: 'crudités, barbecue, américain',
+    i: ['100 g Chou blanc', '0.5 Carotte', '1 cs Mayonnaise', '1 cs Yaourt nature', '1 cc Vinaigre', '1 pincée Sucre', 'Sel et poivre'],
+    s: ['Émincer le chou très finement et râper la carotte.', 'Mélanger mayonnaise, yaourt, vinaigre, sucre, sel et poivre.', 'Mélanger avec les légumes.', 'Laisser 30 minutes au frais avant de servir.'] },
+
+  { n: 'Salade de lentilles au saumon fumé', c: 'Léger', k: null, t: 30, m: null, kw: 'légumineuses, poisson, salade',
+    i: ['60 g Lentilles vertes', '40 g Saumon fumé', '0.25 Échalote', '1 cs Huile d’olive', '1 cc Vinaigre', '1 cc Moutarde', 'Ciboulette', 'Sel et poivre'],
+    s: ['Cuire les lentilles 25 minutes, puis les égoutter.', 'Préparer une vinaigrette moutardée et ajouter l’échalote hachée.', 'Mélanger les lentilles tièdes avec la vinaigrette.', 'Ajouter le saumon en lanières et la ciboulette.'] },
+
+  { n: 'Salade de riz au thon', c: 'Léger', k: null, t: 25, m: null, kw: 'salade, été, pique-nique',
+    i: ['60 g Riz', '50 g Thon au naturel', '30 g Maïs', '0.5 Tomate', '0.25 Poivron', '1 cs Huile', '1 cc Vinaigre', 'Sel et poivre'],
+    s: ['Cuire le riz, le rincer à l’eau froide.', 'Couper tomate et poivron en dés.', 'Mélanger riz, thon émietté, maïs et légumes.', 'Assaisonner avec huile, vinaigre, sel et poivre.'] },
+
+  { n: 'Salade de pommes de terre aux harengs', c: 'Léger', k: null, t: 30, m: null, kw: 'poisson, bistrot, pommes de terre',
+    i: ['200 g Pommes de terre', '60 g Filets de hareng fumé', '0.25 Oignon rouge', '1 cs Huile', '1 cc Vinaigre', 'Persil', 'Poivre'],
+    s: ['Cuire les pommes de terre 20 minutes, puis les couper en rondelles tièdes.', 'Couper les harengs en morceaux et l’oignon en fines rondelles.', 'Arroser d’huile et de vinaigre.', 'Parsemer de persil et poivrer.'] },
+
+  { n: 'Œufs mimosa', c: 'Léger', k: null, t: 20, m: null, kw: 'entrée, œufs, apéritif',
+    i: ['2 Œuf|Œufs', '1 cs Mayonnaise', 'Ciboulette', 'Sel et poivre'],
+    s: ['Cuire les œufs 10 minutes, les refroidir et les écaler.', 'Les couper en deux et retirer les jaunes.', 'Écraser les jaunes avec la mayonnaise, saler et poivrer.', 'Garnir les blancs et décorer de ciboulette.'] },
+
+  { n: 'Poireaux vinaigrette', c: 'Léger', k: null, t: 25, m: null, kw: 'entrée, bistrot, légumes',
+    i: ['2 Poireau|Poireaux', '1 cs Huile', '1 cc Vinaigre', '1 cc Moutarde', '0.5 Œuf dur', 'Sel et poivre'],
+    s: ['Cuire les blancs de poireaux 15 minutes à l’eau salée ou à la vapeur.', 'Les égoutter et les laisser tiédir.', 'Préparer une vinaigrette moutardée.', 'Napper les poireaux et parsemer d’œuf dur haché.'] },
+
+  { n: 'Avocat aux crevettes', c: 'Léger', k: null, t: 10, m: null, kw: 'entrée, fruits de mer, fête',
+    i: ['0.5 Avocat', '40 g Crevettes décortiquées', '1 cs Mayonnaise', '1 cc Ketchup', '0.25 Citron', 'Sel et poivre'],
+    s: ['Couper l’avocat en deux, retirer le noyau et arroser de citron.', 'Mélanger mayonnaise et ketchup pour la sauce cocktail.', 'Mélanger les crevettes à la sauce.', 'Garnir l’avocat.'] },
+
+  { n: 'Carpaccio de bœuf', c: 'Léger', k: null, t: 15, m: null, kw: 'italie, viande crue, été',
+    i: ['100 g Bœuf très frais', '15 g Parmesan', '1 cs Huile d’olive', '0.25 Citron', '10 g Roquette', 'Sel et poivre'],
+    s: ['Mettre la viande 30 minutes au congélateur pour la trancher plus facilement.', 'La couper en tranches très fines et les étaler dans l’assiette.', 'Arroser d’huile et de citron, saler et poivrer.', 'Ajouter la roquette et des copeaux de parmesan.'] },
+
+  { n: 'Tartare de saumon', c: 'Léger', k: null, t: 15, m: null, kw: 'poisson cru, frais, été',
+    i: ['120 g Saumon très frais', '0.25 Avocat', '0.5 Citron vert', '1 cc Échalote', '1 cc Huile d’olive', 'Ciboulette', 'Sel et poivre'],
+    s: ['Couper le saumon en petits dés.', 'Ajouter l’échalote hachée, le citron vert, l’huile, la ciboulette, le sel et le poivre.', 'Ajouter l’avocat en dés au dernier moment.', 'Dresser dans un cercle et servir bien frais.'] },
+
+  { n: 'Velouté d’asperges', c: 'Léger', k: null, t: 30, m: null, kw: 'soupe, printemps',
+    i: ['200 g Asperges', '1 Pomme de terre|Pommes de terre', '300 ml Bouillon de légumes', '1 cs Crème fraîche', 'Sel et poivre'],
+    s: ['Éplucher les asperges et les couper en tronçons.', 'Les cuire 20 minutes avec la pomme de terre dans le bouillon.', 'Mixer et ajouter la crème.', 'Saler et poivrer.'] },
+
+  { n: 'Asperges sauce mousseline', c: 'Léger', k: null, t: 25, m: null, kw: 'printemps, entrée, légumes',
+    i: ['6 Asperge|Asperges', '1 Jaune d’œuf|Jaunes d’œuf', '20 g Beurre', '0.25 Citron', '1 cs Crème fouettée', 'Sel'],
+    s: ['Éplucher les asperges et les cuire 12 à 15 minutes à l’eau salée.', 'Fouetter le jaune avec un peu d’eau au bain-marie jusqu’à ce qu’il mousse.', 'Ajouter le beurre fondu petit à petit, puis le citron.', 'Incorporer la crème fouettée et napper les asperges.'] },
+
+  { n: 'Tomates provençales', c: 'Léger', k: null, t: 35, m: null, kw: 'provence, légumes, four, accompagnement',
+    i: ['2 Tomate|Tomates', '1 Gousse d’ail', '1 cs Persil', '1 cs Chapelure', '1 cs Huile d’olive', 'Sel et poivre'],
+    s: ['Préchauffer le four à 200 °C.', 'Couper les tomates en deux et les poser dans un plat.', 'Mélanger ail haché, persil, chapelure et huile, puis répartir sur les tomates.', 'Cuire 25 minutes.'] },
+
+  { n: 'Gratin de courgettes et chèvre', c: 'Léger', k: null, t: 40, m: null, kw: 'gratin, fromage de chèvre, été',
+    i: ['250 g Courgettes', '40 g Fromage de chèvre', '1 Œuf|Œufs', '50 ml Lait', 'Sel et poivre'],
+    s: ['Couper les courgettes en rondelles et les faire revenir 10 minutes.', 'Les mettre dans un plat avec le chèvre émietté.', 'Battre l’œuf avec le lait, saler et poivrer, puis verser dessus.', 'Cuire 25 minutes à 190 °C.'] },
+
+  { n: 'Papillote de saumon aux légumes', c: 'Léger', k: null, t: 30, m: null, kw: 'poisson, four, sain',
+    i: ['1 Pavé de saumon|Pavés de saumon', '0.5 Courgette', '0.5 Carotte', '0.25 Citron', 'Aneth', 'Sel et poivre'],
+    s: ['Préchauffer le four à 200 °C.', 'Couper les légumes en fines lamelles et les poser sur une feuille de papier cuisson.', 'Ajouter le saumon, le citron, l’aneth, le sel et le poivre.', 'Fermer la papillote et cuire 20 minutes.'] },
+
+  { n: 'Crevettes à la plancha', c: 'Léger', k: null, t: 15, m: null, kw: 'fruits de mer, été, barbecue',
+    i: ['150 g Crevettes crues', '1 Gousse d’ail', '1 cs Huile d’olive', '1 cc Persil', '0.25 Citron', 'Sel et poivre'],
+    s: ['Mariner les crevettes avec l’huile, l’ail haché, le sel et le poivre.', 'Les saisir 2 minutes par face sur la plancha ou dans une poêle très chaude.', 'Arroser de citron.', 'Parsemer de persil.'] },
+
+  { n: 'Taboulé libanais', c: 'Léger', k: null, t: 20, m: null, kw: 'liban, persil, frais, été',
+    i: ['20 g Boulgour fin', '40 g Persil plat', '5 g Menthe', '1 Tomate|Tomates', '0.25 Oignon', '0.5 Citron', '1 cs Huile d’olive', 'Sel'],
+    s: ['Faire gonfler le boulgour 10 minutes dans le jus de citron.', 'Hacher très finement le persil, la menthe et l’oignon.', 'Couper la tomate en tout petits dés.', 'Mélanger le tout avec l’huile et le sel.'] },
+
+  { n: 'Houmous et crudités', c: 'Léger', k: null, t: 10, m: null, kw: 'liban, pois chiches, apéritif, végétarien',
+    i: ['100 g Pois chiches cuits', '1 cs Tahini', '0.25 Citron', '0.5 Gousse d’ail', '1 cs Huile d’olive', '1 Carotte|Carottes', '0.25 Concombre', 'Sel'],
+    s: ['Mixer pois chiches, tahini, citron, ail, sel et un peu d’eau jusqu’à ce que ce soit lisse.', 'Verser dans un bol et arroser d’huile d’olive.', 'Couper carotte et concombre en bâtonnets.', 'Servir les crudités à tremper dans le houmous.'] },
+
+  { n: 'Velouté de lentilles corail au curry', c: 'Léger', k: null, t: 25, m: null, kw: 'soupe, légumineuses, épices',
+    i: ['50 g Lentilles corail', '0.5 Carotte', '0.25 Oignon', '1 cc Curry', '300 ml Bouillon de légumes', '30 ml Lait de coco', 'Sel'],
+    s: ['Faire revenir l’oignon avec le curry.', 'Ajouter lentilles, carotte en rondelles et bouillon.', 'Cuire 15 minutes, puis mixer.', 'Ajouter le lait de coco et saler.'] },
+
+  { n: 'Salade de fenouil à l’orange', c: 'Léger', k: null, t: 10, m: null, kw: 'crudités, agrumes, hiver',
+    i: ['0.5 Fenouil', '1 Orange|Oranges', '1 cs Huile d’olive', '5 Olive noire|Olives noires', 'Sel et poivre'],
+    s: ['Émincer très finement le fenouil.', 'Peler l’orange à vif et la couper en rondelles.', 'Mélanger avec les olives.', 'Arroser d’huile, saler et poivrer.'] },
+
+  { n: 'Salade de chou rouge aux pommes', c: 'Léger', k: null, t: 15, m: null, kw: 'crudités, hiver',
+    i: ['100 g Chou rouge', '0.5 Pomme|Pommes', '1 cs Noix', '1 cs Huile', '1 cc Vinaigre de cidre', 'Sel et poivre'],
+    s: ['Émincer finement le chou rouge.', 'Couper la pomme en lamelles.', 'Mélanger avec les noix concassées.', 'Assaisonner avec huile, vinaigre, sel et poivre.'] },
+
+  { n: 'Velouté de champignons et noisettes', c: 'Léger', k: null, t: 30, m: null, kw: 'soupe, automne',
+    i: ['200 g Champignons', '0.25 Oignon', '250 ml Bouillon de légumes', '30 ml Crème', '1 cs Noisettes', 'Sel et poivre'],
+    s: ['Faire revenir l’oignon et les champignons.', 'Ajouter le bouillon et cuire 15 minutes.', 'Mixer avec la crème.', 'Servir parsemé de noisettes concassées et grillées.'] },
+
+  { n: 'Endives braisées', c: 'Léger', k: null, t: 35, m: null, kw: 'légumes, hiver, accompagnement',
+    i: ['2 Endive|Endives', '10 g Beurre', '1 pincée Sucre', '0.25 Citron', 'Sel et poivre'],
+    s: ['Couper les endives en deux dans la longueur.', 'Les dorer dans le beurre avec le sucre.', 'Ajouter le citron et un fond d’eau, couvrir et cuire 25 minutes.', 'Saler et poivrer.'] },
+  { n: 'Croque-monsieur au four express', c: 'Rapide', k: null, t: 15, m: null, kw: 'sandwich, enfants, jambon fromage',
+    i: ['2 Tranche de pain de mie|Tranches de pain de mie', '1 Tranche de jambon|Tranches de jambon', '30 g Emmental râpé', '1 cs Crème fraîche'],
+    s: ['Préchauffer le four à 220 °C.', 'Poser le jambon et un peu de fromage entre les tranches de pain.', 'Tartiner le dessus de crème et parsemer du reste de fromage.', 'Cuire 10 minutes.'] },
+
+  { n: 'Pâtes au beurre et parmesan', c: 'Rapide', k: null, t: 12, m: null, kw: 'enfants, pâtes, simple',
+    i: ['100 g Pâtes', '15 g Beurre', '20 g Parmesan', 'Poivre'],
+    s: ['Cuire les pâtes dans l’eau salée.', 'Garder un peu d’eau de cuisson.', 'Mélanger les pâtes égouttées avec le beurre, le parmesan et un peu d’eau de cuisson.', 'Poivrer et servir.'] },
+
+  { n: 'Pâtes à l’ail et à l’huile', c: 'Rapide', k: null, t: 12, m: null, kw: 'italie, aglio olio, pâtes, économique',
+    i: ['100 g Spaghetti', '2 Gousse d’ail|Gousses d’ail', '2 cs Huile d’olive', '1 pincée Piment', '1 cs Persil'],
+    s: ['Cuire les spaghetti.', 'Faire dorer doucement l’ail en lamelles et le piment dans l’huile.', 'Ajouter les pâtes égouttées et une louche d’eau de cuisson.', 'Mélanger et parsemer de persil.'] },
+
+  { n: 'Pâtes au jambon et crème', c: 'Rapide', k: null, t: 15, m: null, kw: 'enfants, pâtes, simple',
+    i: ['100 g Pâtes', '1 Tranche de jambon|Tranches de jambon', '40 ml Crème fraîche', '15 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Cuire les pâtes.', 'Couper le jambon en dés et le réchauffer dans la crème.', 'Mélanger avec les pâtes égouttées.', 'Ajouter le gruyère et poivrer.'] },
+
+  { n: 'Omelette au fromage', c: 'Rapide', k: null, t: 10, m: null, kw: 'œufs, simple, végétarien',
+    i: ['2 Œuf|Œufs', '20 g Emmental râpé', '5 g Beurre', 'Sel et poivre'],
+    s: ['Battre les œufs avec le sel et le poivre.', 'Faire fondre le beurre dans une poêle.', 'Verser les œufs et cuire 2 minutes en ramenant les bords.', 'Ajouter le fromage, plier l’omelette et servir.'] },
+
+  { n: 'Œufs au plat et bacon', c: 'Rapide', k: null, t: 10, m: null, kw: 'brunch, œufs, petit-déjeuner',
+    i: ['2 Œuf|Œufs', '2 Tranche de bacon|Tranches de bacon', '1 Tranche de pain|Tranches de pain', 'Sel et poivre'],
+    s: ['Dorer le bacon dans une poêle.', 'Casser les œufs à côté et cuire 3 minutes.', 'Griller le pain.', 'Servir avec sel et poivre.'] },
+
+  { n: 'Tartines avocat et œuf', c: 'Rapide', k: null, t: 12, m: null, kw: 'brunch, avocado toast, œufs',
+    i: ['2 Tranche de pain complet|Tranches de pain complet', '0.5 Avocat', '1 Œuf|Œufs', '0.25 Citron', '1 pincée Piment', 'Sel et poivre'],
+    s: ['Griller le pain.', 'Écraser l’avocat avec le citron, le sel et le poivre.', 'Cuire l’œuf au plat ou poché.', 'Tartiner l’avocat, poser l’œuf et ajouter une pincée de piment.'] },
+
+  { n: 'Bagel saumon fromage frais', c: 'Rapide', k: null, t: 8, m: null, kw: 'sandwich, brunch, poisson',
+    i: ['1 Bagel|Bagels', '40 g Saumon fumé', '30 g Fromage frais', '0.25 Oignon rouge', 'Aneth'],
+    s: ['Couper et toaster le bagel.', 'Tartiner de fromage frais.', 'Ajouter le saumon, l’oignon rouge en fines rondelles et l’aneth.', 'Refermer et servir.'] },
+
+  { n: 'Panini tomate mozzarella', c: 'Rapide', k: null, t: 10, m: null, kw: 'sandwich, italie, végétarien',
+    i: ['1 Pain panini|Pains panini', '50 g Mozzarella', '0.5 Tomate', '1 cc Pesto'],
+    s: ['Ouvrir le pain et le tartiner de pesto.', 'Ajouter tomate et mozzarella en tranches.', 'Refermer et presser.', 'Cuire 5 minutes dans un appareil à panini ou une poêle chaude en appuyant.'] },
+
+  { n: 'Club sandwich au poulet', c: 'Rapide', k: null, t: 15, m: null, kw: 'sandwich, poulet, bacon',
+    i: ['3 Tranche de pain de mie|Tranches de pain de mie', '80 g Poulet cuit', '2 Tranche de bacon|Tranches de bacon', '0.5 Tomate', '2 Feuille de salade|Feuilles de salade', '1 cs Mayonnaise'],
+    s: ['Griller le pain et dorer le bacon.', 'Tartiner les tranches de mayonnaise.', 'Monter en deux étages : salade, poulet, tomate, bacon.', 'Couper en triangles et maintenir avec des piques.'] },
+
+  { n: 'Fajitas végétariennes', c: 'Rapide', k: null, t: 20, m: null, kw: 'mexique, wrap, poivrons',
+    i: ['2 Tortilla|Tortillas', '1 Poivron|Poivrons', '0.5 Oignon', '50 g Haricots rouges', '1 cc Épices tex-mex', '1 cs Crème fraîche', '1 cs Huile'],
+    s: ['Faire sauter poivron et oignon en lanières dans l’huile 8 minutes.', 'Ajouter haricots et épices 2 minutes.', 'Chauffer les tortillas.', 'Garnir et ajouter la crème.'] },
+
+  { n: 'Nouilles sautées au poulet', c: 'Rapide', k: null, t: 20, m: null, kw: 'asiatique, wok',
+    i: ['80 g Nouilles chinoises', '100 g Blanc de poulet', '0.5 Carotte', '0.5 Poivron', '1 cs Sauce soja', '1 cc Sauce huître', '1 cs Huile'],
+    s: ['Cuire les nouilles et les égoutter.', 'Sauter le poulet en lamelles dans l’huile 4 minutes.', 'Ajouter les légumes en julienne et cuire 3 minutes.', 'Ajouter nouilles et sauces, puis sauter 2 minutes.'] },
+
+  { n: 'Pâtes au saumon fumé et citron', c: 'Rapide', k: null, t: 15, m: null, kw: 'poisson, pâtes, crème',
+    i: ['100 g Pâtes', '40 g Saumon fumé', '40 ml Crème', '0.25 Citron', 'Aneth', 'Poivre'],
+    s: ['Cuire les pâtes.', 'Chauffer la crème avec le zeste de citron.', 'Ajouter les pâtes et le saumon en lanières hors du feu.', 'Ajouter l’aneth et poivrer.'] },
+
+  { n: 'Steak haché et purée express', c: 'Rapide', k: null, t: 20, m: null, kw: 'enfants, viande, simple',
+    i: ['1 Steak haché|Steaks hachés', '200 g Pommes de terre', '50 ml Lait', '10 g Beurre', 'Sel et poivre'],
+    s: ['Cuire les pommes de terre en dés 12 minutes à l’eau.', 'Les écraser avec lait et beurre.', 'Cuire le steak 3 minutes par face.', 'Servir avec la purée.'] },
+
+  { n: 'Poêlée de gnocchis aux légumes', c: 'Rapide', k: null, t: 20, m: null, kw: 'gnocchis, poêle, végétarien',
+    i: ['200 g Gnocchis', '0.5 Courgette', '6 Tomate cerise|Tomates cerises', '1 cs Huile d’olive', '15 g Parmesan', 'Basilic'],
+    s: ['Dorer les gnocchis crus dans l’huile 6 minutes.', 'Ajouter la courgette en dés et cuire 5 minutes.', 'Ajouter les tomates cerises coupées 2 minutes.', 'Servir avec parmesan et basilic.'] },
+
+  { n: 'Riz sauté aux œufs et jambon', c: 'Rapide', k: null, t: 15, m: null, kw: 'restes, riz, wok',
+    i: ['150 g Riz cuit', '1 Œuf|Œufs', '1 Tranche de jambon|Tranches de jambon', '30 g Petits pois', '1 cs Sauce soja', '1 cs Huile'],
+    s: ['Brouiller l’œuf dans l’huile chaude et le réserver.', 'Sauter le riz et les petits pois 4 minutes.', 'Ajouter le jambon en dés et l’œuf.', 'Assaisonner de soja.'] },
+
+  { n: 'Tortilla espagnole', c: 'Rapide', k: null, t: 35, m: null, kw: 'espagne, œufs, pommes de terre',
+    i: ['150 g Pommes de terre', '2 Œuf|Œufs', '0.25 Oignon', '2 cs Huile d’olive', 'Sel'],
+    s: ['Couper pommes de terre et oignon en fines tranches, les cuire doucement 15 minutes dans l’huile.', 'Battre les œufs avec le sel et y mélanger les pommes de terre.', 'Verser dans la poêle et cuire 5 minutes à feu doux.', 'Retourner à l’aide d’une assiette et cuire encore 3 minutes.'] },
+
+  { n: 'Gratin de pâtes express', c: 'Rapide', k: null, t: 25, m: null, kw: 'enfants, gratin, pâtes',
+    i: ['100 g Pâtes', '50 ml Crème', '30 g Gruyère râpé', '1 Tranche de jambon|Tranches de jambon', 'Sel et poivre'],
+    s: ['Cuire les pâtes.', 'Mélanger avec la crème et le jambon en dés.', 'Mettre dans un plat et couvrir de gruyère.', 'Gratiner 10 minutes sous le gril.'] },
+
+  { n: 'Wraps thon crudités', c: 'Rapide', k: null, t: 10, m: null, kw: 'sandwich, poisson, pique-nique',
+    i: ['1 Tortilla|Tortillas', '60 g Thon au naturel', '1 cs Fromage frais', '0.5 Tomate', '2 Feuille de salade|Feuilles de salade', '20 g Maïs'],
+    s: ['Tartiner la tortilla de fromage frais.', 'Ajouter salade, tomate en dés, maïs et thon émietté.', 'Rouler serré.', 'Couper en deux.'] },
+
+  { n: 'Salade de pâtes au poulet pesto', c: 'Rapide', k: null, t: 20, m: null, kw: 'salade, pique-nique, pâtes',
+    i: ['80 g Pâtes', '80 g Poulet cuit', '1 cs Pesto', '6 Tomate cerise|Tomates cerises', '30 g Mozzarella'],
+    s: ['Cuire les pâtes et les rincer à l’eau froide.', 'Couper poulet, tomates et mozzarella.', 'Mélanger le tout avec le pesto.', 'Garder au frais jusqu’au repas.'] },
+
+  { n: 'Croque au chèvre et miel', c: 'Rapide', k: null, t: 15, m: null, kw: 'sandwich, fromage, sucré-salé',
+    i: ['2 Tranche de pain de mie|Tranches de pain de mie', '40 g Fromage de chèvre', '1 cc Miel', '5 g Beurre'],
+    s: ['Beurrer l’extérieur des tranches.', 'Mettre le chèvre en rondelles et le miel à l’intérieur.', 'Refermer.', 'Dorer 3 minutes par face à la poêle.'] },
+
+  { n: 'Pizza sur pain pita', c: 'Rapide', k: null, t: 15, m: null, kw: 'pizza, enfants, express',
+    i: ['1 Pain pita|Pains pita', '2 cs Coulis de tomate', '40 g Mozzarella', '1 Tranche de jambon|Tranches de jambon', 'Origan'],
+    s: ['Préchauffer le four à 220 °C.', 'Étaler le coulis sur le pain pita.', 'Ajouter jambon et mozzarella, puis l’origan.', 'Cuire 8 minutes.'] },
+
+  { n: 'Assiette de crevettes et riz à l’ail', c: 'Rapide', k: null, t: 20, m: null, kw: 'fruits de mer, riz',
+    i: ['70 g Riz', '120 g Crevettes', '1 Gousse d’ail', '10 g Beurre', '1 cc Persil', '0.25 Citron'],
+    s: ['Cuire le riz.', 'Faire fondre le beurre avec l’ail.', 'Ajouter les crevettes et cuire 3 minutes.', 'Servir sur le riz avec persil et citron.'] },
+
+  { n: 'Cake salé jambon olives', c: 'Apéritif', k: null, t: 55, m: null, kw: 'apéritif, pique-nique, four',
+    i: ['40 g Farine', '1 Œuf|Œufs', '20 ml Lait', '15 ml Huile', '2 g Levure chimique', '30 g Jambon', '15 g Olives vertes', '20 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Préchauffer le four à 180 °C.', 'Mélanger farine, levure, œufs, lait et huile.', 'Ajouter jambon en dés, olives et gruyère.', 'Verser dans un moule à cake et cuire 40 minutes.'] },
+
+  { n: 'Feuilletés saucisse', c: 'Apéritif', k: null, t: 30, m: null, kw: 'apéritif, pâte feuilletée, enfants',
+    i: ['0.25 Pâte feuilletée|Pâtes feuilletées', '2 Saucisse cocktail|Saucisses cocktail', '0.25 Œuf'],
+    s: ['Préchauffer le four à 200 °C.', 'Couper la pâte en bandes et enrouler chaque saucisse.', 'Dorer à l’œuf battu.', 'Cuire 15 minutes.'] },
+
+  { n: 'Gougères au fromage', c: 'Apéritif', k: null, t: 45, m: null, kw: 'bourgogne, apéritif, pâte à choux',
+    i: ['25 g Farine', '20 g Beurre', '50 ml Eau', '1 Œuf|Œufs', '25 g Comté râpé', 'Sel'],
+    s: ['Porter l’eau, le beurre et le sel à ébullition.', 'Ajouter la farine d’un coup et remuer jusqu’à ce que la pâte se détache.', 'Hors du feu, ajouter l’œuf, puis le fromage.', 'Former de petites boules sur une plaque et cuire 20 minutes à 200 °C sans ouvrir le four.'] },
+
+  { n: 'Tapenade', c: 'Apéritif', k: null, t: 10, m: null, kw: 'provence, olives, tartinade',
+    i: ['50 g Olives noires dénoyautées', '1 cc Câpres', '1 Filet d’anchois|Filets d’anchois', '0.25 Gousse d’ail', '1 cs Huile d’olive'],
+    s: ['Mettre olives, câpres, anchois et ail dans un mixeur.', 'Mixer en ajoutant l’huile petit à petit.', 'Arrêter quand la pâte est encore un peu granuleuse.', 'Servir sur du pain grillé.'] },
+
+  { n: 'Guacamole', c: 'Apéritif', k: null, t: 10, m: null, kw: 'mexique, avocat, tartinade',
+    i: ['1 Avocat|Avocats', '0.5 Citron vert', '0.25 Tomate', '0.25 Oignon rouge', 'Coriandre', '1 pincée Piment', 'Sel'],
+    s: ['Écraser l’avocat à la fourchette.', 'Ajouter le citron vert, le sel et le piment.', 'Ajouter tomate, oignon et coriandre hachés.', 'Servir avec des chips de maïs.'] },
+
+  { n: 'Tzatziki', c: 'Apéritif', k: null, t: 10, m: null, kw: 'grèce, yaourt, concombre',
+    i: ['0.25 Concombre', '100 g Yaourt grec', '0.5 Gousse d’ail', '1 cc Huile d’olive', 'Menthe ou aneth', 'Sel'],
+    s: ['Râper le concombre et bien l’essorer.', 'Mélanger avec le yaourt et l’ail râpé.', 'Ajouter les herbes, l’huile et le sel.', 'Garder au frais.'] },
+
+  { n: 'Rillettes de thon', c: 'Apéritif', k: null, t: 5, m: null, kw: 'tartinade, poisson, rapide',
+    i: ['60 g Thon au naturel', '30 g Fromage frais', '0.25 Citron', 'Ciboulette', 'Poivre'],
+    s: ['Égoutter le thon.', 'L’écraser avec le fromage frais.', 'Ajouter citron, ciboulette et poivre.', 'Servir sur du pain grillé.'] },
+
+  { n: 'Bruschetta tomate basilic', c: 'Apéritif', k: null, t: 15, m: null, kw: 'italie, pain grillé, été',
+    i: ['2 Tranche de pain de campagne|Tranches de pain de campagne', '1 Tomate|Tomates', '0.5 Gousse d’ail', '1 cs Huile d’olive', 'Basilic', 'Sel'],
+    s: ['Griller le pain.', 'Le frotter avec l’ail.', 'Couper la tomate en dés et la mélanger avec huile, basilic et sel.', 'Répartir sur le pain.'] },
+
+  { n: 'Brochettes tomate mozzarella', c: 'Apéritif', k: null, t: 10, m: null, kw: 'apéritif, été, enfants',
+    i: ['4 Tomate cerise|Tomates cerises', '4 Billes de mozzarella', 'Basilic', '1 cc Huile d’olive'],
+    s: ['Enfiler sur des piques une tomate, une feuille de basilic et une bille de mozzarella.', 'Recommencer.', 'Arroser d’un filet d’huile.', 'Saler légèrement.'] },
+
+  { n: 'Mini-quiches', c: 'Apéritif', k: null, t: 35, m: null, kw: 'apéritif, four, lardons',
+    i: ['0.25 Pâte brisée|Pâtes brisées', '1 Œuf|Œufs', '40 ml Crème', '20 g Lardons', '15 g Gruyère râpé'],
+    s: ['Préchauffer le four à 190 °C.', 'Découper des ronds de pâte et garnir des moules à muffins.', 'Mélanger œuf, crème, lardons et gruyère, puis répartir.', 'Cuire 20 minutes.'] },
+
+  { n: 'Gaspacho de concombre', c: 'Apéritif', k: null, t: 10, m: null, kw: 'soupe froide, verrine, été',
+    i: ['0.5 Concombre', '50 g Yaourt', '0.25 Gousse d’ail', 'Menthe', '1 cc Huile d’olive', 'Sel'],
+    s: ['Éplucher et couper le concombre.', 'Mixer avec le yaourt, l’ail, la menthe et le sel.', 'Ajouter l’huile.', 'Servir très frais en verrines.'] },
+
+  { n: 'Blinis au saumon', c: 'Apéritif', k: null, t: 15, m: null, kw: 'fête, poisson, apéritif',
+    i: ['4 Blini|Blinis', '40 g Saumon fumé', '1 cs Crème épaisse', 'Aneth', '0.25 Citron'],
+    s: ['Réchauffer les blinis.', 'Mélanger la crème avec un peu de citron.', 'Garnir chaque blini de crème et d’un morceau de saumon.', 'Décorer d’aneth.'] },
+
+  { n: 'Samoussas aux légumes', c: 'Apéritif', k: null, t: 45, m: null, kw: 'inde, feuilles de brick, épices',
+    i: ['2 Feuille de brick|Feuilles de brick', '1 Pomme de terre|Pommes de terre', '30 g Petits pois', '0.25 Oignon', '0.5 cc Curry', '1 cs Huile'],
+    s: ['Cuire la pomme de terre en dés 10 minutes à l’eau.', 'Faire revenir l’oignon avec le curry, ajouter pomme de terre et petits pois.', 'Couper les feuilles en bandes, garnir et plier en triangles.', 'Badigeonner d’huile et cuire 15 minutes à 200 °C.'] },
+
+  { n: 'Croquettes de pommes de terre', c: 'Accompagnement', k: null, t: 45, m: null, kw: 'friture, enfants, pommes de terre',
+    i: ['200 g Pommes de terre', '0.5 Œuf', '15 g Parmesan', '30 g Chapelure', 'Huile de friture', 'Sel'],
+    s: ['Cuire les pommes de terre et les écraser en purée sèche.', 'Ajouter le parmesan et le jaune d’œuf.', 'Former des petits boudins, les passer dans le blanc puis la chapelure.', 'Frire 3 minutes et égoutter.'] },
+
+  { n: 'Pommes de terre sautées', c: 'Accompagnement', k: null, t: 30, m: null, kw: 'pommes de terre, poêle',
+    i: ['250 g Pommes de terre', '1 cs Huile', '1 Gousse d’ail', '1 cc Persil', 'Sel et poivre'],
+    s: ['Couper les pommes de terre en dés.', 'Les faire dorer 25 minutes dans l’huile en remuant.', 'Ajouter l’ail et le persil hachés en fin de cuisson.', 'Saler et poivrer.'] },
+
+  { n: 'Purée maison', c: 'Accompagnement', k: null, t: 30, m: null, kw: 'pommes de terre, enfants',
+    i: ['250 g Pommes de terre', '80 ml Lait', '15 g Beurre', '1 pincée Muscade', 'Sel'],
+    s: ['Cuire les pommes de terre épluchées 20 minutes à l’eau salée.', 'Les écraser au presse-purée.', 'Ajouter le lait chaud et le beurre.', 'Assaisonner de muscade et de sel.'] },
+
+  { n: 'Frites au four', c: 'Accompagnement', k: null, t: 40, m: null, kw: 'pommes de terre, enfants, four',
+    i: ['250 g Pommes de terre', '1 cs Huile', '0.5 cc Paprika', 'Sel'],
+    s: ['Préchauffer le four à 220 °C.', 'Couper les pommes de terre en bâtonnets et les sécher.', 'Les mélanger avec l’huile et le paprika.', 'Cuire 30 minutes en les retournant à mi-cuisson, puis saler.'] },
+
+  { n: 'Riz pilaf', c: 'Accompagnement', k: null, t: 25, m: null, kw: 'riz, simple',
+    i: ['70 g Riz', '0.25 Oignon', '10 g Beurre', '150 ml Bouillon', 'Sel'],
+    s: ['Faire fondre l’oignon dans le beurre.', 'Ajouter le riz et le nacrer 2 minutes.', 'Verser le bouillon chaud, couvrir et cuire 17 minutes à feu doux.', 'Égrainer à la fourchette.'] },
+
+  { n: 'Haricots verts à l’ail', c: 'Accompagnement', k: null, t: 20, m: null, kw: 'légumes verts',
+    i: ['150 g Haricots verts', '1 Gousse d’ail', '10 g Beurre', 'Sel et poivre'],
+    s: ['Cuire les haricots 10 minutes à l’eau salée.', 'Les égoutter.', 'Les faire revenir dans le beurre avec l’ail haché 2 minutes.', 'Saler et poivrer.'] },
+
+  { n: 'Carottes glacées', c: 'Accompagnement', k: null, t: 25, m: null, kw: 'légumes, enfants',
+    i: ['200 g Carottes', '10 g Beurre', '1 cc Sucre', 'Sel'],
+    s: ['Couper les carottes en rondelles.', 'Les mettre dans une poêle avec beurre, sucre, sel et eau à hauteur.', 'Cuire jusqu’à évaporation de l’eau, environ 20 minutes.', 'Les rouler dans le jus brillant.'] },
+
+  { n: 'Légumes rôtis au four', c: 'Accompagnement', k: null, t: 40, m: null, kw: 'légumes, four, végétarien',
+    i: ['0.5 Courgette', '0.5 Poivron', '0.5 Oignon rouge', '1 Carotte|Carottes', '1 cs Huile d’olive', 'Herbes de Provence', 'Sel et poivre'],
+    s: ['Préchauffer le four à 200 °C.', 'Couper les légumes en morceaux.', 'Les mélanger avec l’huile, les herbes, le sel et le poivre.', 'Rôtir 30 minutes en remuant à mi-cuisson.'] },
+
+  { n: 'Pommes de terre au four', c: 'Accompagnement', k: null, t: 50, m: null, kw: 'pommes de terre, four',
+    i: ['250 g Pommes de terre', '1 cs Huile d’olive', 'Romarin', 'Sel'],
+    s: ['Préchauffer le four à 210 °C.', 'Couper les pommes de terre en quartiers.', 'Les mélanger avec huile, romarin et sel.', 'Cuire 40 minutes.'] },
+
+  { n: 'Purée de patate douce', c: 'Accompagnement', k: null, t: 30, m: null, kw: 'purée, doux',
+    i: ['250 g Patates douces', '10 g Beurre', '30 ml Lait', 'Sel'],
+    s: ['Cuire les patates douces en cubes 15 minutes à l’eau.', 'Les égoutter.', 'Les écraser avec le beurre et le lait.', 'Saler.'] },
+
+  { n: 'Semoule aux légumes', c: 'Accompagnement', k: null, t: 15, m: null, kw: 'semoule, rapide',
+    i: ['60 g Semoule', '0.25 Courgette', '0.25 Poivron', '1 cs Huile d’olive', '0.5 cc Cumin', 'Sel'],
+    s: ['Verser la même quantité d’eau bouillante salée sur la semoule, couvrir 5 minutes.', 'Faire sauter les légumes en petits dés avec le cumin.', 'Égrainer la semoule avec l’huile.', 'Mélanger avec les légumes.'] },
+
+  { n: 'Gratin de chou-fleur', c: 'Accompagnement', k: null, t: 40, m: null, kw: 'gratin, béchamel, légumes',
+    i: ['250 g Chou-fleur', '15 g Beurre', '15 g Farine', '150 ml Lait', '25 g Gruyère râpé', 'Sel et poivre'],
+    s: ['Cuire le chou-fleur 10 minutes à l’eau.', 'Préparer une béchamel avec beurre, farine et lait.', 'Mettre le chou-fleur dans un plat, napper de béchamel et parsemer de gruyère.', 'Gratiner 20 minutes à 200 °C.'] },
+
+  { n: 'Épinards à la crème', c: 'Accompagnement', k: null, t: 15, m: null, kw: 'légumes verts',
+    i: ['200 g Épinards', '30 ml Crème', '1 pincée Muscade', 'Sel et poivre'],
+    s: ['Faire tomber les épinards dans une poêle 3 minutes.', 'Bien les égoutter.', 'Ajouter la crème et la muscade.', 'Saler, poivrer et chauffer 2 minutes.'] },
+
+  { n: 'Lentilles aux carottes', c: 'Accompagnement', k: null, t: 35, m: null, kw: 'légumineuses',
+    i: ['60 g Lentilles vertes', '1 Carotte|Carottes', '0.25 Oignon', '1 Feuille de laurier', 'Sel'],
+    s: ['Rincer les lentilles.', 'Les mettre dans l’eau froide avec la carotte en dés, l’oignon et le laurier.', 'Cuire 25 minutes après ébullition.', 'Saler en fin de cuisson.'] },
+
+  { n: 'Flageolets au thym', c: 'Accompagnement', k: null, t: 15, m: null, kw: 'légumineuses, agneau',
+    i: ['150 g Flageolets cuits', '0.25 Oignon', '10 g Beurre', 'Thym', 'Sel et poivre'],
+    s: ['Faire fondre l’oignon dans le beurre.', 'Ajouter les flageolets égouttés et le thym.', 'Chauffer 8 minutes avec un peu d’eau.', 'Saler et poivrer.'] },
+
+  { n: 'Pâtes au beurre d’herbes', c: 'Accompagnement', k: null, t: 12, m: null, kw: 'pâtes, simple',
+    i: ['80 g Pâtes', '10 g Beurre', 'Persil et ciboulette', 'Sel et poivre'],
+    s: ['Cuire les pâtes.', 'Hacher les herbes.', 'Mélanger pâtes, beurre et herbes.', 'Saler et poivrer.'] },
+
+  { n: 'Polenta crémeuse', c: 'Accompagnement', k: null, t: 15, m: null, kw: 'italie, maïs',
+    i: ['50 g Polenta', '250 ml Lait', '10 g Beurre', '15 g Parmesan', 'Sel'],
+    s: ['Porter le lait à ébullition avec le sel.', 'Verser la polenta en pluie en fouettant.', 'Cuire 5 à 8 minutes en remuant.', 'Ajouter beurre et parmesan.'] },
+
+  { n: 'Champignons persillés', c: 'Accompagnement', k: null, t: 15, m: null, kw: 'légumes, poêle',
+    i: ['200 g Champignons', '1 Gousse d’ail', '10 g Beurre', '1 cs Persil', 'Sel et poivre'],
+    s: ['Émincer les champignons.', 'Les faire sauter à feu vif dans le beurre 8 minutes.', 'Ajouter l’ail et le persil hachés.', 'Saler et poivrer.'] },
+
+  { n: 'Pommes de terre Duchesse', c: 'Accompagnement', k: null, t: 45, m: null, kw: 'fête, pommes de terre, four',
+    i: ['250 g Pommes de terre', '1 Jaune d’œuf|Jaunes d’œuf', '15 g Beurre', '1 pincée Muscade', 'Sel'],
+    s: ['Cuire les pommes de terre et les écraser en purée sèche.', 'Ajouter beurre, jaune d’œuf, muscade et sel.', 'Former des rosaces à la poche à douille sur une plaque.', 'Cuire 15 minutes à 210 °C.'] },
+
+  { n: 'Ratatouille au four express', c: 'Accompagnement', k: null, t: 45, m: null, kw: 'provence, légumes, tian',
+    i: ['0.5 Aubergine', '0.5 Courgette', '1 Tomate|Tomates', '0.25 Oignon', '1 cs Huile d’olive', 'Herbes de Provence', 'Sel'],
+    s: ['Préchauffer le four à 190 °C.', 'Trancher les légumes en rondelles fines.', 'Les alterner debout dans un plat sur l’oignon émincé.', 'Arroser d’huile, saler, ajouter les herbes et cuire 35 minutes.'] },
+
+  { n: 'Béchamel', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'sauce, base, gratin',
+    i: ['15 g Beurre', '15 g Farine', '200 ml Lait', '1 pincée Muscade', 'Sel et poivre'],
+    s: ['Faire fondre le beurre dans une casserole.', 'Ajouter la farine et remuer 1 minute.', 'Verser le lait froid en fouettant sans arrêt jusqu’à ce que la sauce épaississe.', 'Assaisonner de muscade, sel et poivre.'] },
+
+  { n: 'Sauce tomate maison', c: 'Sauce et base', k: null, t: 30, m: null, kw: 'sauce, base, pâtes',
+    i: ['200 g Tomates concassées', '0.25 Oignon', '1 Gousse d’ail', '1 cs Huile d’olive', '1 pincée Sucre', 'Basilic', 'Sel'],
+    s: ['Faire revenir l’oignon et l’ail dans l’huile.', 'Ajouter les tomates et le sucre.', 'Laisser mijoter 20 minutes.', 'Ajouter le basilic et saler. Mixer si besoin.'] },
+
+  { n: 'Vinaigrette maison', c: 'Sauce et base', k: null, t: 3, m: null, kw: 'sauce, salade',
+    i: ['1 cc Moutarde', '1 cs Vinaigre', '3 cs Huile', 'Sel et poivre'],
+    s: ['Mélanger la moutarde, le vinaigre, le sel et le poivre.', 'Ajouter l’huile en fouettant.', 'Goûter et ajuster.', 'Se garde quelques jours au frais dans un pot fermé.'] },
+
+  { n: 'Mayonnaise maison', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'sauce, œuf',
+    i: ['1 Jaune d’œuf|Jaunes d’œuf', '1 cc Moutarde', '150 ml Huile', '1 cc Vinaigre', 'Sel et poivre'],
+    s: ['Tous les ingrédients doivent être à température ambiante.', 'Fouetter le jaune avec la moutarde.', 'Verser l’huile en filet très fin en fouettant sans arrêt.', 'Ajouter vinaigre, sel et poivre. Garder au frais et consommer dans la journée.'] },
+
+  { n: 'Pesto au basilic', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'sauce, italie, pâtes',
+    i: ['30 g Basilic', '20 g Parmesan', '1 cs Pignons de pin', '0.5 Gousse d’ail', '50 ml Huile d’olive', 'Sel'],
+    s: ['Griller légèrement les pignons.', 'Mixer le basilic, l’ail, les pignons et le parmesan.', 'Ajouter l’huile petit à petit.', 'Saler. Se garde 3 jours couvert d’huile.'] },
+
+  { n: 'Sauce au poivre', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'sauce, viande',
+    i: ['1 cc Poivre concassé', '1 cc Échalote', '30 ml Cognac ou bouillon', '60 ml Crème', '5 g Beurre', 'Sel'],
+    s: ['Faire revenir l’échalote et le poivre dans le beurre.', 'Verser le cognac ou le bouillon et laisser réduire.', 'Ajouter la crème et laisser épaissir 3 minutes.', 'Saler et servir avec une viande.'] },
+
+  { n: 'Sauce blanche au yaourt', c: 'Sauce et base', k: null, t: 5, m: null, kw: 'sauce, kebab, crudités',
+    i: ['100 g Yaourt grec', '0.5 Gousse d’ail', '0.25 Citron', 'Ciboulette', 'Sel et poivre'],
+    s: ['Mélanger le yaourt avec l’ail râpé.', 'Ajouter le citron.', 'Ajouter la ciboulette, saler et poivrer.', 'Garder au frais.'] },
+
+  { n: 'Pâte à crêpes', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'base, crêpes, chandeleur',
+    i: ['60 g Farine', '1 Œuf|Œufs', '125 ml Lait', '5 g Beurre fondu', '1 pincée Sel'],
+    s: ['Mettre la farine et le sel dans un saladier et creuser un puits.', 'Ajouter l’œuf et un peu de lait, mélanger.', 'Verser le reste du lait petit à petit pour éviter les grumeaux.', 'Ajouter le beurre fondu et laisser reposer 1 heure.'] },
+
+  { n: 'Pâte brisée maison', c: 'Sauce et base', k: null, t: 15, m: null, kw: 'base, tarte, quiche',
+    i: ['60 g Farine', '30 g Beurre', '15 ml Eau froide', '1 pincée Sel'],
+    s: ['Mélanger la farine et le sel.', 'Ajouter le beurre froid en dés et sabler du bout des doigts.', 'Ajouter l’eau et former une boule sans trop pétrir.', 'Laisser reposer 30 minutes au frais avant d’étaler.'] },
+
+  { n: 'Bouillon de légumes maison', c: 'Sauce et base', k: null, t: 50, m: null, kw: 'base, soupe',
+    i: ['1 Carotte|Carottes', '0.5 Poireau', '0.25 Oignon', '0.25 Céleri', 'Bouquet garni', '500 ml Eau', 'Sel'],
+    s: ['Couper les légumes en gros morceaux.', 'Les mettre dans l’eau froide avec le bouquet garni.', 'Laisser frémir 40 minutes.', 'Filtrer et saler.'] },
+
+  { n: 'Sauce béarnaise', c: 'Sauce et base', k: null, t: 20, m: null, kw: 'sauce, viande, classique',
+    i: ['1 Jaune d’œuf|Jaunes d’œuf', '40 g Beurre', '1 cc Échalote', '1 cs Vinaigre', '1 cc Estragon', 'Sel et poivre'],
+    s: ['Faire réduire le vinaigre avec l’échalote jusqu’à ce qu’il en reste une cuillère.', 'Ajouter le jaune et un peu d’eau, fouetter au bain-marie jusqu’à ce que ce soit mousseux.', 'Ajouter le beurre fondu petit à petit en fouettant.', 'Ajouter l’estragon, saler et poivrer.'] },
+
+  { n: 'Caramel au beurre salé', c: 'Sauce et base', k: null, t: 15, m: null, kw: 'dessert, sauce, bretagne',
+    i: ['50 g Sucre', '20 g Beurre demi-sel', '40 ml Crème'],
+    s: ['Faire fondre le sucre à sec dans une casserole jusqu’à ce qu’il soit ambré.', 'Hors du feu, ajouter le beurre puis la crème chaude, attention aux éclaboussures.', 'Remettre 1 minute sur feu doux en mélangeant.', 'Verser dans un pot et laisser refroidir.'] },
+
+  { n: 'Crème pâtissière', c: 'Sauce et base', k: null, t: 15, m: null, kw: 'dessert, base, pâtisserie',
+    i: ['125 ml Lait', '1 Jaune d’œuf|Jaunes d’œuf', '25 g Sucre', '10 g Maïzena', 'Vanille'],
+    s: ['Chauffer le lait avec la vanille.', 'Fouetter le jaune avec le sucre et la maïzena.', 'Verser le lait chaud dessus, puis remettre sur le feu en fouettant jusqu’à épaississement.', 'Filmer au contact et laisser refroidir.'] },
+
+  { n: 'Chantilly maison', c: 'Sauce et base', k: null, t: 10, m: null, kw: 'dessert, crème',
+    i: ['100 ml Crème liquide entière', '10 g Sucre glace', 'Vanille'],
+    s: ['Mettre la crème et le bol au réfrigérateur au moins 30 minutes.', 'Fouetter la crème bien froide.', 'Ajouter le sucre glace et la vanille quand elle commence à épaissir.', 'Arrêter dès qu’elle tient au fouet.'] },
+  { n: 'Gratin d’aubergines à la parmesane', c: 'Végétarien', k: null, t: 70, m: null, kw: 'italie, parmigiana, gratin',
+    i: ['1 Aubergine|Aubergines', '150 g Coulis de tomate', '60 g Mozzarella', '20 g Parmesan', '1 cs Huile d’olive', 'Basilic', 'Sel'],
+    s: ['Couper l’aubergine en tranches, les huiler et les rôtir 20 minutes à 200 °C.', 'Alterner dans un plat aubergines, coulis, mozzarella et basilic.', 'Finir par le parmesan.', 'Cuire 30 minutes à 180 °C.'] },
+
+  { n: 'Curry de pois chiches', c: 'Végétarien', k: null, t: 30, m: null, kw: 'inde, légumineuses, lait de coco',
+    i: ['150 g Pois chiches cuits', '100 g Tomates concassées', '60 ml Lait de coco', '0.25 Oignon', '1 Gousse d’ail', '1 cc Curry', '40 g Épinards', '70 g Riz', '1 cs Huile'],
+    s: ['Cuire le riz.', 'Faire revenir l’oignon, l’ail et le curry dans l’huile.', 'Ajouter tomates, lait de coco et pois chiches, puis cuire 15 minutes.', 'Ajouter les épinards 2 minutes et servir avec le riz.'] },
+
+  { n: 'Lasagnes ricotta épinards', c: 'Végétarien', k: null, t: 60, m: null, kw: 'italie, gratin, pâtes',
+    i: ['3 Feuille de lasagne|Feuilles de lasagne', '100 g Épinards', '80 g Ricotta', '150 g Coulis de tomate', '40 g Mozzarella', '15 g Parmesan', 'Sel et poivre'],
+    s: ['Faire tomber les épinards, les égoutter et les mélanger à la ricotta.', 'Alterner coulis, feuilles de lasagne et mélange épinards-ricotta.', 'Finir par du coulis, la mozzarella et le parmesan.', 'Cuire 35 minutes à 190 °C.'] },
+
+  { n: 'Tarte aux légumes du soleil', c: 'Végétarien', k: null, t: 55, m: null, kw: 'tarte, été, provence',
+    i: ['0.25 Pâte brisée|Pâtes brisées', '0.5 Courgette', '0.5 Tomate', '0.25 Poivron', '1 Œuf|Œufs', '40 ml Crème', '15 g Parmesan', 'Herbes de Provence'],
+    s: ['Préchauffer le four à 190 °C et garnir un moule de pâte.', 'Faire revenir les légumes en dés 10 minutes.', 'Les répartir sur la pâte, verser l’œuf battu avec la crème et le parmesan.', 'Cuire 35 minutes.'] },
+
+  { n: 'Falafels', c: 'Végétarien', k: null, t: 40, m: null, kw: 'liban, pois chiches, street food',
+    i: ['100 g Pois chiches secs trempés', '0.25 Oignon', '1 Gousse d’ail', '1 cs Persil', '0.5 cc Cumin', '1 cc Farine', 'Huile de friture', 'Sel'],
+    s: ['Faire tremper les pois chiches secs une nuit (ne pas utiliser de pois chiches cuits).', 'Les mixer avec oignon, ail, persil, cumin, farine et sel.', 'Former des boulettes.', 'Les frire 4 minutes et servir avec une sauce au yaourt.'] },
+
+  { n: 'Burger végétarien aux haricots', c: 'Végétarien', k: null, t: 30, m: null, kw: 'burger, légumineuses',
+    i: ['1 Pain à burger|Pains à burger', '100 g Haricots rouges cuits', '20 g Chapelure', '0.25 Oignon', '0.5 cc Paprika', '1 Tranche de cheddar|Tranches de cheddar', '0.5 Tomate', '1 Feuille de salade|Feuilles de salade'],
+    s: ['Écraser les haricots avec l’oignon haché, la chapelure et le paprika.', 'Former un steak et le dorer 4 minutes par face.', 'Poser le cheddar dessus pour qu’il fonde.', 'Monter le burger avec salade et tomate.'] },
+
+  { n: 'Risotto aux asperges', c: 'Végétarien', k: null, t: 35, m: null, kw: 'italie, printemps, riz',
+    i: ['80 g Riz arborio', '100 g Asperges vertes', '0.25 Oignon', '300 ml Bouillon de légumes', '20 g Parmesan', '10 g Beurre'],
+    s: ['Couper les asperges en tronçons et garder les pointes.', 'Nacrer le riz avec l’oignon dans le beurre.', 'Ajouter le bouillon louche par louche pendant 18 minutes, avec les tronçons à mi-cuisson.', 'Ajouter les pointes 3 minutes avant la fin, puis le parmesan.'] },
+
+  { n: 'Tofu sauté aux légumes', c: 'Végétarien', k: null, t: 25, m: null, kw: 'asiatique, wok, tofu',
+    i: ['120 g Tofu ferme', '0.5 Poivron', '60 g Brocoli', '1 cs Sauce soja', '1 cc Sirop d’érable', '1 cc Gingembre râpé', '1 cs Huile', '70 g Riz'],
+    s: ['Cuire le riz.', 'Dorer le tofu en cubes dans l’huile 6 minutes.', 'Ajouter les légumes et cuire 5 minutes.', 'Ajouter soja, sirop et gingembre, puis mélanger 1 minute.'] },
+
+  { n: 'Chili végétarien aux patates douces', c: 'Végétarien', k: null, t: 40, m: null, kw: 'mexique, légumineuses, épicé',
+    i: ['150 g Patate douce', '80 g Haricots rouges', '150 g Tomates concassées', '0.25 Oignon', '1 cc Épices chili', '30 g Maïs', '1 cs Huile'],
+    s: ['Faire revenir l’oignon avec les épices.', 'Ajouter patate douce en dés et tomates, puis cuire 20 minutes.', 'Ajouter haricots et maïs, puis cuire 10 minutes.', 'Servir avec du riz ou une tortilla.'] },
+
+  { n: 'Gnocchis à la crème de potiron', c: 'Végétarien', k: null, t: 30, m: null, kw: 'automne, gnocchis, crémeux',
+    i: ['200 g Gnocchis', '150 g Potiron', '40 ml Crème', '15 g Parmesan', '1 pincée Muscade', 'Sel'],
+    s: ['Cuire le potiron en dés 15 minutes et le mixer avec la crème.', 'Cuire les gnocchis.', 'Mélanger avec la sauce et la muscade.', 'Servir avec le parmesan.'] },
+
+  { n: 'Quiche chèvre épinards', c: 'Végétarien', k: null, t: 50, m: null, kw: 'tarte, fromage de chèvre',
+    i: ['0.25 Pâte brisée|Pâtes brisées', '60 g Épinards', '40 g Fromage de chèvre', '1 Œuf|Œufs', '50 ml Crème', 'Sel et poivre'],
+    s: ['Préchauffer le four à 190 °C et garnir un moule de pâte.', 'Faire tomber les épinards et les égoutter.', 'Les répartir avec le chèvre, puis verser l’œuf battu avec la crème.', 'Cuire 35 minutes.'] },
+
+  { n: 'Galettes de sarrasin champignons et œuf', c: 'Végétarien', k: null, t: 20, m: null, kw: 'bretagne, crêpe salée',
+    i: ['1 Galette de sarrasin|Galettes de sarrasin', '60 g Champignons', '1 Œuf|Œufs', '20 g Emmental râpé', '5 g Beurre'],
+    s: ['Faire revenir les champignons émincés.', 'Chauffer la galette dans la poêle beurrée.', 'Casser l’œuf au centre, ajouter le fromage et les champignons.', 'Replier les bords et cuire jusqu’à ce que le blanc soit pris.'] },
+
+  { n: 'Poêlée de légumes et halloumi', c: 'Végétarien', k: null, t: 20, m: null, kw: 'fromage grillé, légumes',
+    i: ['60 g Halloumi', '0.5 Courgette', '0.5 Poivron', '6 Tomate cerise|Tomates cerises', '1 cs Huile d’olive', 'Origan'],
+    s: ['Faire sauter courgette et poivron en dés 8 minutes.', 'Ajouter les tomates cerises 2 minutes.', 'Griller l’halloumi en tranches 2 minutes par face.', 'Servir sur les légumes avec l’origan.'] },
+
+  { n: 'Dahl de lentilles corail', c: 'Végétarien', k: null, t: 30, m: null, kw: 'inde, légumineuses, épices',
+    i: ['70 g Lentilles corail', '100 g Tomates concassées', '60 ml Lait de coco', '0.25 Oignon', '1 Gousse d’ail', '1 cc Curry', '0.5 cc Curcuma', '70 g Riz'],
+    s: ['Faire revenir l’oignon, l’ail et les épices.', 'Ajouter lentilles, tomates et 200 ml d’eau.', 'Cuire 20 minutes, puis ajouter le lait de coco.', 'Servir avec le riz.'] },
+
+  { n: 'Croque-tofu au pesto', c: 'Végétarien', k: null, t: 15, m: null, kw: 'sandwich, tofu',
+    i: ['2 Tranche de pain de mie|Tranches de pain de mie', '60 g Tofu fumé', '1 cc Pesto', '20 g Mozzarella'],
+    s: ['Tartiner le pain de pesto.', 'Ajouter tofu en tranches et mozzarella.', 'Refermer.', 'Dorer 3 minutes par face à la poêle.'] },
+
+  { n: 'Ravioles du Dauphiné gratinées', c: 'Végétarien', k: null, t: 20, m: null, kw: 'fromage, gratin, rapide',
+    i: ['120 g Ravioles du Dauphiné', '50 ml Crème', '20 g Comté râpé', 'Ciboulette'],
+    s: ['Préchauffer le gril du four.', 'Mettre les ravioles dans un plat avec la crème.', 'Parsemer de comté.', 'Gratiner 8 minutes et ajouter la ciboulette.'] },
+
+  { n: 'Œufs en meurette végétariens', c: 'Végétarien', k: null, t: 35, m: null, kw: 'bourgogne, œufs pochés, vin rouge',
+    i: ['2 Œuf|Œufs', '150 ml Vin rouge', '0.25 Oignon', '40 g Champignons', '10 g Beurre', '1 cc Farine', '1 Tranche de pain|Tranches de pain'],
+    s: ['Faire revenir l’oignon et les champignons dans le beurre, ajouter la farine.', 'Verser le vin et laisser réduire 15 minutes.', 'Pocher les œufs 3 minutes dans la sauce ou dans l’eau vinaigrée.', 'Servir les œufs nappés de sauce sur le pain grillé.'] },
+
+  { n: 'Tian de légumes au chèvre', c: 'Végétarien', k: null, t: 50, m: null, kw: 'provence, légumes, four',
+    i: ['0.5 Courgette', '1 Tomate|Tomates', '0.5 Aubergine', '30 g Fromage de chèvre', '1 cs Huile d’olive', 'Thym', 'Sel'],
+    s: ['Préchauffer le four à 190 °C.', 'Couper les légumes en rondelles.', 'Les disposer debout en alternant dans un plat, arroser d’huile, saler et ajouter le thym.', 'Cuire 35 minutes, ajouter le chèvre et cuire encore 5 minutes.'] },
+
+  { n: 'Poivrons farcis au riz et feta', c: 'Végétarien', k: null, t: 55, m: null, kw: 'légumes farcis, four',
+    i: ['1 Poivron|Poivrons', '50 g Riz cuit', '30 g Feta', '0.5 Tomate', '1 cc Persil', '1 cs Huile d’olive'],
+    s: ['Préchauffer le four à 190 °C.', 'Couper le chapeau du poivron et le vider.', 'Mélanger riz, feta, tomate en dés et persil, puis farcir.', 'Arroser d’huile et cuire 40 minutes.'] },
+
+  { n: 'Pad thaï au tofu', c: 'Végétarien', k: null, t: 25, m: null, kw: 'thaïlande, nouilles, wok',
+    i: ['80 g Nouilles de riz', '80 g Tofu', '1 Œuf|Œufs', '30 g Pousses de soja', '1 cs Cacahuètes', '1 cs Sauce soja', '1 cc Sucre', '0.5 Citron vert', '1 cs Huile'],
+    s: ['Faire tremper les nouilles dans l’eau chaude selon le paquet.', 'Dorer le tofu en dés dans l’huile, puis brouiller l’œuf à côté.', 'Ajouter les nouilles, la soja et le sucre, puis sauter 3 minutes.', 'Ajouter soja, cacahuètes et citron vert.'] },
+
+  { n: 'Velouté de butternut et pois chiches grillés', c: 'Végétarien', k: null, t: 40, m: null, kw: 'soupe, automne',
+    i: ['250 g Courge butternut', '0.25 Oignon', '300 ml Bouillon de légumes', '50 g Pois chiches cuits', '0.5 cc Paprika', '1 cs Huile'],
+    s: ['Cuire la courge en cubes avec l’oignon dans le bouillon 25 minutes.', 'Mixer.', 'Griller les pois chiches avec l’huile et le paprika 10 minutes à la poêle.', 'Servir la soupe garnie de pois chiches.'] },
+
+  { n: 'Pâtes aux légumes grillés et feta', c: 'Végétarien', k: null, t: 30, m: null, kw: 'pâtes, été',
+    i: ['100 g Pâtes', '0.5 Courgette', '0.5 Poivron', '30 g Feta', '1 cs Huile d’olive', 'Basilic'],
+    s: ['Rôtir les légumes en dés 20 minutes à 210 °C avec l’huile.', 'Cuire les pâtes.', 'Mélanger pâtes et légumes.', 'Ajouter la feta émiettée et le basilic.'] },
+
+  { n: 'Tarte Tatin', c: 'Dessert', k: null, t: 60, m: null, kw: 'pommes, caramel, classique',
+    i: ['2 Pomme|Pommes', '30 g Sucre', '15 g Beurre', '0.25 Pâte brisée|Pâtes brisées'],
+    s: ['Préchauffer le four à 190 °C.', 'Faire un caramel avec le sucre et le beurre dans un moule allant sur le feu.', 'Serrer les pommes en quartiers sur le caramel et cuire 10 minutes sur le feu.', 'Couvrir de pâte en rentrant les bords et cuire 30 minutes.', 'Retourner sur un plat tant que c’est tiède.'] },
+
+  { n: 'Éclairs au chocolat', c: 'Dessert', k: null, t: 90, m: null, kw: 'pâtisserie, pâte à choux, chocolat',
+    i: ['25 g Farine', '20 g Beurre', '50 ml Eau', '1 Œuf|Œufs', '125 ml Lait', '1 Jaune d’œuf|Jaunes d’œuf', '25 g Sucre', '10 g Maïzena', '25 g Chocolat noir'],
+    s: ['Préparer la pâte à choux : faire bouillir eau et beurre, ajouter la farine, dessécher, puis incorporer l’œuf hors du feu.', 'Former des bâtonnets à la poche et cuire 25 minutes à 180 °C sans ouvrir le four.', 'Préparer une crème pâtissière avec lait, jaune, sucre et maïzena, et y faire fondre la moitié du chocolat.', 'Garnir les éclairs refroidis, puis les glacer avec le reste du chocolat fondu.'] },
+
+  { n: 'Paris-Brest', c: 'Dessert', k: null, t: 100, m: null, kw: 'pâtisserie, praliné, pâte à choux, fête',
+    i: ['25 g Farine', '20 g Beurre', '50 ml Eau', '1 Œuf|Œufs', '10 g Amandes effilées', '125 ml Lait', '1 Jaune d’œuf|Jaunes d’œuf', '15 g Sucre', '10 g Maïzena', '30 g Praliné', '25 g Beurre mou'],
+    s: ['Préparer une pâte à choux et la dresser en couronne, parsemer d’amandes.', 'Cuire 30 minutes à 180 °C.', 'Préparer une crème pâtissière, la laisser refroidir, puis la fouetter avec le beurre mou et le praliné.', 'Couper la couronne en deux, garnir de crème et refermer.'] },
+
+  { n: 'Baba au rhum', c: 'Dessert', k: null, t: 90, m: null, kw: 'pâtisserie, rhum, sirop',
+    i: ['40 g Farine', '1 Œuf|Œufs', '15 g Beurre', '5 g Sucre', '2 g Levure de boulanger', '15 ml Lait tiède', '50 g Sucre pour le sirop', '100 ml Eau', '1 cs Rhum', '1 cs Chantilly'],
+    s: ['Mélanger farine, sucre, levure délayée dans le lait et œuf, puis ajouter le beurre fondu.', 'Verser dans un moule à savarin et laisser lever 45 minutes.', 'Cuire 20 minutes à 180 °C.', 'Faire bouillir l’eau et le sucre, ajouter le rhum, et arroser le baba tiède de sirop.', 'Servir avec la chantilly.'] },
+
+  { n: 'Bûche de Noël au chocolat', c: 'Dessert', k: null, t: 80, m: null, kw: 'noël, fête, gâteau roulé, chocolat',
+    i: ['1 Œuf|Œufs', '25 g Sucre', '20 g Farine', '40 g Chocolat noir', '40 ml Crème', '10 g Beurre', '1 cc Sucre glace'],
+    s: ['Fouetter l’œuf avec le sucre jusqu’à ce qu’il blanchisse, puis ajouter la farine.', 'Étaler sur une plaque et cuire 8 minutes à 200 °C.', 'Rouler le biscuit chaud dans un torchon humide.', 'Faire une ganache avec chocolat, crème et beurre, garnir le biscuit, le rouler et le recouvrir du reste.', 'Faire des stries à la fourchette et saupoudrer de sucre glace.'] },
+
+  { n: 'Cannelés', c: 'Dessert', k: null, t: 80, m: null, kw: 'bordeaux, vanille, rhum, goûter',
+    i: ['125 ml Lait', '10 g Beurre', '0.5 Œuf', '50 g Sucre', '25 g Farine', '1 cc Rhum', 'Vanille'],
+    s: ['Faire bouillir le lait avec la vanille et le beurre.', 'Mélanger œuf, sucre et farine, puis verser le lait chaud et le rhum.', 'Laisser reposer la pâte au moins 12 heures au frais.', 'Remplir des moules beurrés et cuire 10 minutes à 240 °C, puis 50 minutes à 180 °C.'] },
+
+  { n: 'Cheesecake', c: 'Dessert', k: null, t: 80, m: null, kw: 'new york, fromage frais, gâteau',
+    i: ['40 g Biscuits secs', '15 g Beurre', '120 g Fromage frais type Philadelphia', '30 g Sucre', '0.5 Œuf', '20 ml Crème', 'Vanille'],
+    s: ['Écraser les biscuits avec le beurre fondu et tasser au fond d’un moule.', 'Mélanger fromage frais, sucre, œuf, crème et vanille.', 'Verser sur la base et cuire 45 minutes à 160 °C.', 'Laisser refroidir dans le four entrouvert, puis au moins 4 heures au réfrigérateur.'] },
+
+  { n: 'Galette des rois', c: 'Dessert', k: null, t: 60, m: null, kw: 'épiphanie, frangipane, pâte feuilletée',
+    i: ['0.5 Pâte feuilletée|Pâtes feuilletées', '30 g Poudre d’amandes', '20 g Sucre', '15 g Beurre mou', '0.5 Œuf', '1 Fève|Fèves'],
+    s: ['Mélanger poudre d’amandes, sucre, beurre et œuf (garder un peu d’œuf pour dorer).', 'Étaler la crème sur un disque de pâte en laissant un bord, ajouter la fève.', 'Couvrir d’un deuxième disque, souder les bords et dorer à l’œuf.', 'Dessiner des motifs au couteau et cuire 30 minutes à 200 °C.'] },
+
+  { n: 'Profiteroles', c: 'Dessert', k: null, t: 70, m: null, kw: 'pâte à choux, glace, chocolat',
+    i: ['25 g Farine', '20 g Beurre', '50 ml Eau', '1 Œuf|Œufs', '2 Boule de glace vanille|Boules de glace vanille', '30 g Chocolat noir', '30 ml Crème'],
+    s: ['Préparer une pâte à choux et former de petits choux.', 'Cuire 25 minutes à 180 °C.', 'Faire fondre le chocolat avec la crème.', 'Ouvrir les choux, garnir de glace et napper de chocolat chaud.'] },
+
+  { n: 'Tarte aux fraises', c: 'Dessert', k: null, t: 50, m: null, kw: 'fruits, printemps, pâtisserie',
+    i: ['0.25 Pâte sablée|Pâtes sablées', '125 ml Lait', '1 Jaune d’œuf|Jaunes d’œuf', '25 g Sucre', '10 g Maïzena', '100 g Fraises'],
+    s: ['Cuire le fond de tarte à blanc 20 minutes à 180 °C.', 'Préparer une crème pâtissière et la laisser refroidir.', 'Étaler la crème sur le fond refroidi.', 'Disposer les fraises coupées en deux.'] },
+
+  { n: 'Tarte aux poires amandine', c: 'Dessert', k: null, t: 60, m: null, kw: 'fruits, amandes, bourdaloue',
+    i: ['0.25 Pâte sablée|Pâtes sablées', '1 Poire|Poires', '25 g Poudre d’amandes', '20 g Sucre', '15 g Beurre mou', '0.5 Œuf'],
+    s: ['Préchauffer le four à 180 °C et garnir un moule de pâte.', 'Mélanger poudre d’amandes, sucre, beurre et œuf.', 'Étaler cette crème sur la pâte et y disposer la poire en lamelles.', 'Cuire 35 minutes.'] },
+
+  { n: 'Moelleux au citron', c: 'Dessert', k: null, t: 40, m: null, kw: 'gâteau, agrumes, goûter',
+    i: ['1 Œuf|Œufs', '40 g Sucre', '40 g Farine', '30 g Beurre fondu', '0.5 Citron', '2 g Levure chimique'],
+    s: ['Préchauffer le four à 180 °C.', 'Fouetter l’œuf et le sucre, ajouter le zeste et le jus de citron.', 'Ajouter farine, levure et beurre fondu.', 'Verser dans un moule et cuire 25 minutes.'] },
+
+  { n: 'Gâteau marbré', c: 'Dessert', k: null, t: 60, m: null, kw: 'goûter, chocolat, vanille, enfants',
+    i: ['1 Œuf|Œufs', '40 g Sucre', '45 g Farine', '35 g Beurre fondu', '2 g Levure chimique', '1 cc Cacao', 'Vanille'],
+    s: ['Préchauffer le four à 180 °C.', 'Mélanger œuf, sucre, farine, levure et beurre.', 'Séparer la pâte en deux et ajouter le cacao dans une moitié et la vanille dans l’autre.', 'Alterner les deux pâtes dans un moule à cake et cuire 40 minutes.'] },
+
+  { n: 'Carrot cake', c: 'Dessert', k: null, t: 60, m: null, kw: 'gâteau, carottes, cannelle',
+    i: ['60 g Carottes', '0.5 Œuf', '30 g Sucre', '40 g Farine', '25 ml Huile', '10 g Noix', '0.5 cc Cannelle', '2 g Levure chimique', '30 g Fromage frais', '10 g Sucre glace'],
+    s: ['Préchauffer le four à 180 °C.', 'Mélanger œuf, sucre et huile, puis farine, levure et cannelle.', 'Ajouter les carottes râpées et les noix, puis cuire 40 minutes.', 'Mélanger fromage frais et sucre glace et napper le gâteau refroidi.'] },
+
+  { n: 'Crêpes Suzette', c: 'Dessert', k: null, t: 30, m: null, kw: 'crêpes, orange, fête',
+    i: ['2 Crêpe|Crêpes', '15 g Beurre', '15 g Sucre', '1 Orange|Oranges', '1 cs Grand Marnier'],
+    s: ['Faire fondre le beurre et le sucre dans une poêle.', 'Ajouter le jus et le zeste d’orange, puis laisser réduire.', 'Plier les crêpes en quatre et les réchauffer dans la sauce.', 'Ajouter le Grand Marnier et servir aussitôt.'] },
+
+  { n: 'Mousse au citron', c: 'Dessert', k: null, t: 20, m: null, kw: 'frais, agrumes, léger',
+    i: ['1 Œuf|Œufs', '25 g Sucre', '0.5 Citron', '50 ml Crème liquide'],
+    s: ['Fouetter le jaune avec le sucre, le jus et le zeste de citron.', 'Monter la crème en chantilly et le blanc en neige.', 'Incorporer délicatement la crème puis le blanc.', 'Laisser prendre 3 heures au frais.'] },
+
+  { n: 'Crème caramel', c: 'Dessert', k: null, t: 60, m: null, kw: 'flan, caramel, classique',
+    i: ['125 ml Lait', '1 Œuf|Œufs', '20 g Sucre', '20 g Sucre pour le caramel', 'Vanille'],
+    s: ['Faire un caramel et le verser au fond d’un ramequin.', 'Chauffer le lait avec la vanille.', 'Fouetter œuf et sucre, ajouter le lait chaud.', 'Verser dans le ramequin et cuire 35 minutes au bain-marie à 160 °C. Laisser refroidir avant de démouler.'] },
+
+  { n: 'Œufs à la neige', c: 'Dessert', k: null, t: 40, m: null, kw: 'crème anglaise, classique',
+    i: ['1 Œuf|Œufs', '150 ml Lait', '30 g Sucre', 'Vanille'],
+    s: ['Préparer une crème anglaise avec le lait, le jaune et la moitié du sucre en cuisant doucement jusqu’à ce qu’elle nappe la cuillère.', 'Monter le blanc en neige avec le reste du sucre.', 'Pocher des cuillerées de blanc 1 minute de chaque côté dans du lait frémissant.', 'Servir les blancs sur la crème anglaise froide.'] },
+
+  { n: 'Charlotte aux fraises', c: 'Dessert', k: null, t: 40, m: null, kw: 'fruits, fête, sans cuisson',
+    i: ['6 Biscuit cuillère|Biscuits cuillère', '100 g Fraises', '80 g Fromage blanc', '50 ml Crème liquide', '15 g Sucre', '50 ml Sirop de fraise dilué'],
+    s: ['Tremper rapidement les biscuits dans le sirop et tapisser un moule.', 'Mélanger fromage blanc, sucre et crème fouettée.', 'Alterner crème et fraises coupées, finir par des biscuits.', 'Laisser au frais au moins 6 heures avant de démouler.'] },
+
+  { n: 'Fondant à la châtaigne', c: 'Dessert', k: null, t: 40, m: null, kw: 'automne, crème de marrons, gâteau',
+    i: ['100 g Crème de marrons', '1 Œuf|Œufs', '25 g Beurre fondu', '10 g Farine'],
+    s: ['Préchauffer le four à 180 °C.', 'Mélanger la crème de marrons, l’œuf et le beurre fondu.', 'Ajouter la farine.', 'Cuire 25 minutes dans un petit moule.'] },
+
+  { n: 'Kouign-amann', c: 'Dessert', k: null, t: 120, m: null, kw: 'bretagne, beurre, caramel',
+    i: ['60 g Farine', '2 g Levure de boulanger', '35 ml Eau', '35 g Beurre demi-sel', '35 g Sucre'],
+    s: ['Préparer une pâte avec farine, levure et eau, puis la laisser lever 1 heure.', 'L’étaler, poser le beurre et la moitié du sucre, plier en trois.', 'Étaler et replier deux fois en ajoutant le reste du sucre.', 'Mettre dans un moule beurré et cuire 35 minutes à 200 °C.'] },
+
+  { n: 'Churros', c: 'Dessert', k: null, t: 30, m: null, kw: 'espagne, friture, goûter',
+    i: ['60 g Farine', '80 ml Eau', '1 pincée Sel', '1 cs Sucre', '0.5 cc Cannelle', 'Huile de friture'],
+    s: ['Faire bouillir l’eau avec le sel, ajouter la farine d’un coup et mélanger.', 'Mettre la pâte dans une poche à douille cannelée.', 'Pousser des bâtonnets dans l’huile chaude et frire 3 minutes.', 'Rouler dans le sucre mélangé à la cannelle.'] },
+
+  { n: 'Beignets aux pommes', c: 'Dessert', k: null, t: 30, m: null, kw: 'friture, carnaval, fruits',
+    i: ['1 Pomme|Pommes', '40 g Farine', '0.5 Œuf', '50 ml Lait', '1 cc Sucre', 'Huile de friture', '1 cc Sucre glace'],
+    s: ['Mélanger farine, œuf, lait et sucre.', 'Couper la pomme en rondelles et retirer le cœur.', 'Tremper les rondelles dans la pâte et les frire 2 minutes par face.', 'Égoutter et saupoudrer de sucre glace.'] },
+
+  { n: 'Smoothie banane fraise', c: 'Dessert', k: null, t: 5, m: null, kw: 'boisson, fruits, rapide',
+    i: ['1 Banane|Bananes', '80 g Fraises', '100 ml Lait', '1 cc Miel'],
+    s: ['Mettre tous les ingrédients dans un blender.', 'Mixer jusqu’à ce que ce soit lisse.', 'Ajouter un peu de lait si c’est trop épais.', 'Servir bien frais.'] },
+
+  { n: 'Verrine de fromage blanc aux fruits', c: 'Dessert', k: null, t: 10, m: null, kw: 'léger, frais, rapide',
+    i: ['120 g Fromage blanc', '60 g Fruits de saison', '1 cc Miel', '1 cs Granola'],
+    s: ['Couper les fruits en dés.', 'Alterner fromage blanc et fruits dans un verre.', 'Arroser de miel.', 'Ajouter le granola au moment de servir.'] },
+
+  { n: 'Bananes flambées', c: 'Dessert', k: null, t: 10, m: null, kw: 'antilles, fruits, rhum',
+    i: ['1 Banane|Bananes', '10 g Beurre', '1 cs Sucre roux', '1 cs Rhum'],
+    s: ['Couper la banane en deux dans la longueur.', 'La dorer dans le beurre avec le sucre 2 minutes par face.', 'Verser le rhum chaud et flamber avec prudence, loin de la hotte.', 'Servir aussitôt, avec une boule de glace si on veut.'] },
+
+  { n: 'Tarte au chocolat', c: 'Dessert', k: null, t: 50, m: null, kw: 'chocolat, ganache, pâtisserie',
+    i: ['0.25 Pâte sablée|Pâtes sablées', '50 g Chocolat noir', '50 ml Crème', '0.25 Œuf', '5 g Beurre'],
+    s: ['Cuire le fond de tarte à blanc 20 minutes à 180 °C.', 'Verser la crème chaude sur le chocolat et mélanger.', 'Ajouter l’œuf et le beurre.', 'Verser sur le fond et cuire 12 minutes à 150 °C. Laisser prendre au frais.'] },
+
+  { n: 'Financiers', c: 'Dessert', k: null, t: 30, m: null, kw: 'amandes, goûter, petits gâteaux',
+    i: ['1 Blanc d’œuf|Blancs d’œuf', '25 g Poudre d’amandes', '30 g Sucre glace', '10 g Farine', '25 g Beurre'],
+    s: ['Faire fondre le beurre jusqu’à ce qu’il soit noisette.', 'Mélanger poudre d’amandes, sucre glace et farine.', 'Ajouter le blanc non battu, puis le beurre.', 'Remplir de petits moules et cuire 12 minutes à 200 °C.'] },
+
+  { n: 'Sablés au beurre', c: 'Dessert', k: null, t: 40, m: null, kw: 'biscuits, goûter, enfants',
+    i: ['50 g Farine', '30 g Beurre mou', '20 g Sucre', '0.25 Œuf', '1 pincée Sel'],
+    s: ['Mélanger le beurre et le sucre, puis l’œuf.', 'Ajouter farine et sel, former une boule et laisser reposer 30 minutes au frais.', 'Étaler et découper des formes.', 'Cuire 10 à 12 minutes à 180 °C.'] },
+
+  { n: 'Riz au lait à la cannelle', c: 'Dessert', k: null, t: 45, m: null, kw: 'dessert de mamie, lait',
+    i: ['30 g Riz rond', '250 ml Lait', '20 g Sucre', '0.5 cc Cannelle'],
+    s: ['Faire bouillir le lait avec la cannelle.', 'Ajouter le riz et cuire 35 minutes à feu très doux en remuant souvent.', 'Ajouter le sucre en fin de cuisson.', 'Servir tiède ou froid.'] },
+
+  { n: 'Pain d’épices', c: 'Dessert', k: null, t: 70, m: null, kw: 'noël, miel, épices, goûter',
+    i: ['50 g Farine', '40 g Miel', '30 ml Lait', '0.25 Œuf', '1 cc Épices à pain d’épices', '2 g Levure chimique'],
+    s: ['Préchauffer le four à 160 °C.', 'Chauffer le miel avec le lait.', 'Mélanger farine, levure, épices et œuf, puis ajouter le mélange au miel.', 'Cuire 50 minutes dans un moule à cake.'] },
+
+  { n: 'Fraisier simplifié', c: 'Dessert', k: null, t: 90, m: null, kw: 'pâtisserie, fraises, fête',
+    i: ['1 Œuf|Œufs', '25 g Sucre', '25 g Farine', '125 ml Lait', '1 Jaune d’œuf|Jaunes d’œuf', '20 g Sucre pour la crème', '10 g Maïzena', '30 g Beurre mou', '120 g Fraises'],
+    s: ['Préparer une génoise : fouetter œuf et sucre, ajouter la farine et cuire 15 minutes à 180 °C.', 'Préparer une crème pâtissière, la laisser refroidir et la fouetter avec le beurre mou.', 'Couper la génoise en deux disques.', 'Monter : génoise, fraises coupées en deux sur le bord, crème, génoise. Laisser prendre 4 heures au frais.'] }
 ];
 
 // Photos des recettes intégrées (Unsplash, licence gratuite : https://unsplash.com/license)

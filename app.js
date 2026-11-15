@@ -10,11 +10,11 @@
   // ---------------------------------------------------------------
   // 1. Réglages et listes fixes
   // ---------------------------------------------------------------
-  var CATS = ['Tous', 'Plat', 'Léger', 'Rapide', 'Végétarien', 'Dessert'];
+  var CATS = ['Tous', 'Plat', 'Léger', 'Rapide', 'Végétarien', 'Dessert', 'Accompagnement', 'Apéritif', 'Sauce et base'];
   // Filtres affichés dans la liste (Protéiné = au moins 30 g de protéines par personne et au moins 27 % des calories venant des protéines, ou mot-clé « protéiné »)
   var FILTRES = CATS.concat(['Protéiné']);
   var SEUIL_PROTEINES = 30;
-  var TEINTES = { 'Plat': '#F3E3D3', 'Léger': '#DDEBDF', 'Rapide': '#F4EBC9', 'Végétarien': '#E2EAD3', 'Dessert': '#F2E0E6' };
+  var TEINTES = { 'Plat': '#F3E3D3', 'Léger': '#DDEBDF', 'Rapide': '#F4EBC9', 'Végétarien': '#E2EAD3', 'Dessert': '#F2E0E6', 'Accompagnement': '#E8E4D4', 'Apéritif': '#F6E2CF', 'Sauce et base': '#E4E6EC' };
   var KCALS = [{ id: 'all', label: 'Toutes', max: 99999 }, { id: '400', label: '< 400', max: 400 }, { id: '600', label: '< 600', max: 600 }];
   var JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
   var JOURS_COURTS = ['lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.', 'dim.'];
@@ -182,7 +182,7 @@
   // ---------------------------------------------------------------
   var INTEGREES = (window.RECETTES_BRUTES || []).map(function (r, idx) {
     return {
-      id: 'b' + (idx + 1), n: r.n, c: r.c, k: r.k, t: r.t, m: r.m || null,
+      id: 'b' + (idx + 1), n: r.n, c: r.c, k: (typeof r.k === 'number' ? r.k : null), t: r.t, m: r.m || null,
       kw: (r.kw || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean),
       i: r.i.map(lireIngredient), s: r.s,
       img: (window.PHOTOS_RECETTES || {})[r.n] ? 'photos/' + window.PHOTOS_RECETTES[r.n] : null
@@ -427,13 +427,37 @@
     if (!regles.length) return true;
     return !r.i.some(function (i) { return regles.some(function (g) { return ingredientInterdit(i.n, g); }); });
   }
-  function estProteine(r) { return (r.m && r.m[0] >= SEUIL_PROTEINES && r.m[0] * 4 / Math.max(1, r.k) >= 0.27) || r.kw.some(function (k) { return norm(k).indexOf('protein') === 0; }); }
+  function estProteine(r) { return (r.m && r.m[0] >= SEUIL_PROTEINES && r.k != null && r.m[0] * 4 / Math.max(1, r.k) >= 0.27) || r.kw.some(function (k) { return norm(k).indexOf('protein') === 0; }); }
   function toutes() { return INTEGREES.concat(D.perso); }
+  // Mots-clés du formulaire : un mot -> « Ajouter » -> une étiquette #mot
+  var MOTS_SUGGERES = ['four', 'rapide', 'enfants', 'protéiné', 'léger', 'fête', 'été', 'hiver', 'économique', 'famille'];
+  function listeMots(f) { return (f.kw || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function champMotsCles(f) {
+    var mots = listeMots(f);
+    var deja = mots.map(norm);
+    var sugg = MOTS_SUGGERES.filter(function (m) { return deja.indexOf(norm(m)) < 0; });
+    return '<div><label class="etiquette" for="f-mot">Mots-clés</label>' +
+      (mots.length ? '<div class="rangee" style="gap:6px;margin-bottom:8px">' + mots.map(function (m, n) {
+        return '<button class="puce petite on" data-a="retirerMot" data-v="' + n + '" aria-label="Retirer ' + esc(m) + '">#' + esc(m) + ' <span aria-hidden="true">×</span></button>'; }).join('') + '</div>' : '') +
+      '<div style="display:flex;gap:8px"><input id="f-mot" class="champ" type="text" enterkeyhint="done" placeholder="Ex. : four" value="' + esc(U.motCle || '') + '" data-i="motCle" style="flex:1">' +
+      '<button class="btn btn-principal" style="flex:none;padding:0 16px" data-a="ajouterMot">Ajouter</button></div>' +
+      (sugg.length ? '<div class="rangee" style="gap:6px;margin-top:8px">' + sugg.map(function (m) { return '<button class="puce petite suggestion" data-a="ajouterMot" data-v="' + esc(m) + '">+ ' + esc(m) + '</button>'; }).join('') + '</div>' : '') +
+      '</div>';
+  }
+  // Lien de partage d'une recette
+  function slugRecette(nom) { return norm(nom).replace(/ /g, '-'); }
+  function encoder(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function decoder(txt) { var b = txt.replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '='; return JSON.parse(decodeURIComponent(escape(atob(b)))); }
+  function lienRecette(r) {
+    var base = location.origin + location.pathname;
+    if (r.id.charAt(0) === 'b') return base + '#recette=' + slugRecette(r.n);
+    return base + '#r=' + encoder({ n: r.n, c: r.c, k: r.k, t: r.t, kw: r.kw, i: r.i.map(ingEnTexte), s: r.s });
+  }
   // Ordre d'affichage des jours selon le jour de début choisi (0 = lundi, 5 = samedi, 6 = dimanche)
   function ordreJours() { var o = []; for (var i = 0; i < 7; i++) o.push((R.debutSemaine + i) % 7); return o; }
   function repasActifs() { var q = []; if (R.midi) q.push('midi'); if (R.soir) q.push('soir'); return q; }
   function premierLibre(quand) { var o = ordreJours(); for (var i = 0; i < 7; i++) if (!D.plan[quand][o[i]]) return o[i]; return -1; }
-  function parId(id) { var l = toutes(); for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
+  function parId(id) { if (U.partage && id === 'partage') return U.partage; var l = toutes(); for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
   function etatPlacard(nom) { return D.placard[cle(nom)] || 'nondef'; }
   function teinte(r) { return TEINTES[r.c] || '#ECEAE3'; }
   function ajouterRecente(q) {
@@ -485,7 +509,7 @@
       '<div class="badges"><span class="badge badge-cat">' + esc(r.c) + '</span>' +
       (deSaison(r) ? '<span class="badge badge-saison">De saison</span>' : '') +
       (estProteine(r) ? '<span class="badge badge-proteine">Protéiné</span>' : '') +
-      (R.calories ? '<span><b style="color:var(--texte)">' + r.k + '</b> kcal</span>' : '') + '<span>' + r.t + ' min</span></div>' +
+      (R.calories ? (r.k != null ? '<span><b style="color:var(--texte)">' + r.k + '</b> kcal</span>' : '<span>kcal non défini</span>') : '') + '<span>' + r.t + ' min</span></div>' +
       (note ? '<div class="petit rangee" style="gap:4px">' + I.etoile(14, true) + ' Déjà fait · noté ' + note + '/5</div>' : '') +
       '</div></button>';
   }
@@ -497,7 +521,7 @@
   function resultatsListe() {
     var maxK = KCALS.filter(function (k) { return k.id === U.kcal; })[0].max;
     var cand = toutes().filter(function (r) {
-      return recetteAutorisee(r) && (U.cat === 'Tous' || r.c === U.cat || (U.cat === 'Protéiné' && estProteine(r))) && r.k < maxK && (!U.rapide || r.t < 30);
+      return recetteAutorisee(r) && (U.cat === 'Tous' || r.c === U.cat || (U.cat === 'Protéiné' && estProteine(r))) && (maxK > 9999 || (r.k != null && r.k < maxK)) && (!U.rapide || r.t < 30);
     });
     var infos = cand.map(function (r) { return infoRecherche(r, U.q); });
     var meilleur = Math.max.apply(null, infos.map(function (x) { return x.niveau; }).concat([1]));
@@ -636,6 +660,18 @@
     var libreM = premierLibre('midi'), libreS = premierLibre('soir');
     var maPhoto = PHOTOS[r.id];
     var photo = maPhoto || r.img;
+    var recue = r.id === 'partage';
+    if (recue) {
+      return boutonRetour() +
+        '<div class="carte pile" style="background:var(--vert-pale);border:none;gap:8px"><b style="color:var(--vert-fonce)">Recette reçue</b>' +
+        '<div style="font-size:14px;color:var(--vert-fonce)">Quelqu’un t’a partagé cette recette. Ajoute-la pour la garder, la noter et la mettre dans ton planning.</div>' +
+        '<button class="btn btn-principal" data-a="ajouterPartage">Ajouter à mes recettes</button></div>' +
+        '<h2 class="fiche-titre">' + esc(r.n) + '</h2>' +
+        '<div class="carte"><h3 class="section-titre" style="margin:0 0 6px">Ingrédients pour ' + p + ' personne' + (p > 1 ? 's' : '') + '</h3>' +
+        r.i.map(function (i) { return '<div class="ingredient"><span>' + esc(nomIng(i, p)) + '</span><b>' + esc(quantite(i, p)) + '</b></div>'; }).join('') + '</div>' +
+        '<div class="carte pile" style="gap:14px"><h3 class="section-titre" style="margin:0">Préparation</h3>' +
+        r.s.map(function (t, n) { return '<div class="etape"><div class="etape-num">' + (n + 1) + '</div><div class="etape-texte">' + esc(t) + '</div></div>'; }).join('') + '</div>';
+    }
     return boutonRetour() +
       '<div class="photo" style="background:' + teinte(r) + '">' +
       (photo ? '<img src="' + photo + '" alt="Photo de ' + esc(r.n) + '">' : I.assiette(48) + '<span style="font-size:13px">Pas encore de photo</span>') +
@@ -647,11 +683,12 @@
       '<h2 class="fiche-titre">' + esc(r.n) + '</h2></div>' +
       '<button class="coeur-btn" data-a="favori" aria-label="' + (D.favs[r.id] ? 'Retirer des favoris' : 'Ajouter aux favoris') + '">' + (D.favs[r.id] ? I.coeurPlein(24) : I.coeurVide) + '</button></div>' +
       (r.kw.length ? '<div class="mots-cles">' + r.kw.map(function (k) { return '<span class="mot-cle">#' + esc(k) + '</span>'; }).join('') + '</div>' : '') +
-      (R.calories ? '<div class="grille3"><div class="stat"><div>Par personne</div><div>' + r.k + ' kcal</div></div>' +
-      '<div class="stat"><div>Pour ' + p + '</div><div>' + milliers(r.k * p) + ' kcal</div></div>' +
+      (R.calories ? '<div class="grille3"><div class="stat"><div>Par personne</div><div>' + (r.k != null ? r.k + ' kcal' : 'Non défini') + '</div></div>' +
+      '<div class="stat"><div>Pour ' + p + '</div><div>' + (r.k != null ? milliers(r.k * p) + ' kcal' : 'Non défini') + '</div></div>' +
       '<div class="stat"><div>Temps</div><div>' + r.t + ' min</div></div></div>' : '<div class="stat"><div>Temps</div><div>' + r.t + ' min</div></div>') +
       (r.m && R.calories ? '<div class="grille3 petit"><div>Protéines <b style="color:var(--texte)">' + r.m[0] + ' g</b></div><div>Glucides <b style="color:var(--texte)">' + r.m[1] + ' g</b></div><div>Lipides <b style="color:var(--texte)">' + r.m[2] + ' g</b></div></div>' : '') +
-      '<button class="btn btn-noir btn-grand" data-a="cuisiner">' + I.lecture + 'Lancer le mode cuisine</button>' +
+      '<div class="grille2" style="grid-template-columns:2fr 1fr"><button class="btn btn-noir btn-grand" data-a="cuisiner">' + I.lecture + 'Mode cuisine</button>' +
+      '<button class="btn btn-contour btn-grand" data-a="partagerRecette">' + I.partage + 'Partager</button></div>' +
       '<div class="carte"><h3 class="section-titre" style="margin:0 0 6px">Ingrédients pour ' + p + ' personne' + (p > 1 ? 's' : '') + '</h3>' +
       r.i.map(function (i) { return '<div class="ingredient"><span>' + esc(nomIng(i, p)) + '</span><b>' + esc(quantite(i, p)) + '</b></div>'; }).join('') + '</div>' +
       '<div class="carte pile" style="gap:14px"><h3 class="section-titre" style="margin:0">Préparation</h3>' +
@@ -718,14 +755,14 @@
       '<input type="file" accept="image/*" data-photo="form" style="display:none"></label>' +
       '<div><label class="etiquette" for="f-nom">Nom du plat</label><input id="f-nom" class="champ" type="text" placeholder="Ex. : Gratin dauphinois" value="' + esc(f.nom) + '" data-i="form.nom"></div>' +
       '<div><span class="etiquette">Catégorie</span><div class="rangee">' + CATS.slice(1).map(function (c) { return puce(c, f.cat === c, 'formCat', c); }).join('') + '</div></div>' +
-      '<div class="grille3"><div><label class="etiquette" for="f-kcal" style="font-size:13px">Kcal / pers.</label><input id="f-kcal" class="champ" type="number" inputmode="numeric" placeholder="450" value="' + esc(f.kcal) + '" data-i="form.kcal"></div>' +
+      '<div class="grille3"><div><label class="etiquette" for="f-kcal" style="font-size:13px">Kcal / pers.</label><input id="f-kcal" class="champ" type="number" inputmode="numeric" placeholder="Inconnu" value="' + esc(f.kcal) + '" data-i="form.kcal"></div>' +
       '<div><label class="etiquette" for="f-temps" style="font-size:13px">Temps (min)</label><input id="f-temps" class="champ" type="number" inputmode="numeric" placeholder="30" value="' + esc(f.temps) + '" data-i="form.temps"></div>' +
       '<div><label class="etiquette" for="f-pers" style="font-size:13px">Pour (pers.)</label><input id="f-pers" class="champ" type="number" inputmode="numeric" placeholder="1" value="' + esc(f.pers) + '" data-i="form.pers"></div></div>' +
       '<div><label class="etiquette" for="f-ings">Ingrédients</label><div class="aide">Un par ligne, ex. : « 150 g de pommes de terre », « 2 œufs », « 1 c. à café de cumin ». Les quantités sont pour le nombre de personnes indiqué au-dessus.</div>' +
       '<textarea id="f-ings" class="champ" rows="6" data-i="form.ings">' + esc(f.ings) + '</textarea></div>' +
       '<div><label class="etiquette" for="f-etapes">Étapes de la recette</label><div class="aide">Une étape par ligne. Si une étape dit « 10 minutes », un minuteur apparaîtra en mode cuisine.</div>' +
       '<textarea id="f-etapes" class="champ" rows="6" data-i="form.etapes">' + esc(f.etapes) + '</textarea></div>' +
-      '<div><label class="etiquette" for="f-kw">Mots-clés</label><input id="f-kw" class="champ" type="text" placeholder="Ex. : four, enfants, protéiné" value="' + esc(f.kw) + '" data-i="form.kw"></div>' +
+      champMotsCles(f) +
       (U.erreurForm ? '<div style="font-size:14px;color:var(--rouge);font-weight:500">' + esc(U.erreurForm) + '</div>' : '') +
       '<button class="btn btn-principal btn-grand" data-a="enregistrerRecette">' + (U.edition ? 'Enregistrer les modifications' : 'Enregistrer le repas') + '</button>';
   }
@@ -801,7 +838,7 @@
         '<div class="carte-infos" style="gap:2px"><div style="font-size:15px;font-weight:600">' + esc(r.n) + '</div><div class="petit">' + droite + '</div></div></button>';
     }
     return '<h2 class="section-titre">Favoris</h2>' +
-      (favs.length ? favs.map(function (r) { return ligne(r, esc(r.c) + (R.calories ? ' · ' + r.k + ' kcal / pers.' : '')); }).join('') : '<div class="petit">Appuie sur le cœur d’une recette pour l’ajouter ici.</div>') +
+      (favs.length ? favs.map(function (r) { return ligne(r, esc(r.c) + (R.calories && r.k != null ? ' · ' + r.k + ' kcal / pers.' : '')); }).join('') : '<div class="petit">Appuie sur le cœur d’une recette pour l’ajouter ici.</div>') +
       '<h2 class="section-titre">Déjà faits</h2>' +
       (faits.length ? faits.map(function (r) { return ligne(r, AVIS[D.notes[r.id]] + ' · ' + D.notes[r.id] + '/5'); }).join('') : '<div class="petit">Note un plat avec les étoiles de sa fiche pour le retrouver ici.</div>') +
       '<h2 class="section-titre">Mes recettes</h2>' +
@@ -1108,6 +1145,7 @@
   // ---------------------------------------------------------------
   function enregistrerRecette() {
     var f = U.form;
+    if ((U.motCle || '').trim()) { var mots = listeMots(f); U.motCle.split(/[,;#]/).forEach(function (m) { m = m.trim().toLowerCase(); if (m && mots.map(norm).indexOf(norm(m)) < 0) mots.push(m); }); f.kw = mots.join(', '); }
     var lignesIng = f.ings.split('\n').filter(function (l) { return l.trim(); });
     var lignesEt = f.etapes.split('\n').filter(function (l) { return l.trim(); });
     if (!f.nom.trim()) { U.erreurForm = 'Donne un nom au plat.'; afficher(); return; }
@@ -1115,7 +1153,7 @@
     var pers = Math.max(1, parseInt(f.pers, 10) || 1);
     var id = U.edition || ('u' + Date.now());
     var r = {
-      id: id, n: f.nom.trim(), c: f.cat, k: parseInt(f.kcal, 10) || 0, t: parseInt(f.temps, 10) || 0, m: null,
+      id: id, n: f.nom.trim(), c: f.cat, k: (parseInt(f.kcal, 10) > 0 ? parseInt(f.kcal, 10) : null), t: parseInt(f.temps, 10) || 0, m: null,
       kw: f.kw.split(',').map(function (k) { return k.trim(); }).filter(Boolean),
       i: lignesIng.map(function (l) { var i = lireIngredient(l); if (i.q != null) i.q = i.q / pers; return i; }),
       s: lignesEt.length ? lignesEt : ['Pas encore d’étapes.']
@@ -1125,7 +1163,7 @@
     if (U.photoForm) enregistrerPhoto(id, U.photoForm);
     delete cacheTextes[id];
     enregistrer();
-    U.form = copie(FORM_VIDE); U.collage = ''; U.msgCollage = ''; U.erreurForm = ''; U.photoForm = null;
+    U.form = copie(FORM_VIDE); U.collage = ''; U.msgCollage = ''; U.erreurForm = ''; U.photoForm = null; U.motCle = '';
     var etaitEdition = !!U.edition; U.edition = null;
     // On remplace l'écran d'ajout par la fiche
     U.vue = 'fiche'; U.sel = id;
@@ -1152,7 +1190,7 @@
     exclure: function (v) { var k = cle(v); D.exclus[k] = !D.exclus[k]; if (!D.exclus[k]) delete D.exclus[k]; enregistrer(); afficher(); },
     chercher: function (v) { U.q = v; ajouterRecente(v); afficher(); },
     effacerFiltres: function () { U.q = ''; U.cat = 'Tous'; U.kcal = 'all'; U.rapide = false; D.exclus = {}; enregistrer(); afficher(); },
-    hasard: function () { var l = resultatsListe(); if (l.length) aller('fiche', { sel: l[Math.floor(Math.random() * l.length)].id }); },
+    hasard: function () { var l = resultatsListe(); if (U.cat === 'Tous') { var p = l.filter(function (r) { return ['Sauce et base', 'Accompagnement', 'Apéritif', 'Dessert'].indexOf(r.c) < 0; }); if (p.length) l = p; } if (l.length) aller('fiche', { sel: l[Math.floor(Math.random() * l.length)].id }); },
     ouvrir: function (v) {
       if (U.vue === 'liste' && U.q.trim()) ajouterRecente(U.q);
       if (U.onglet !== 'repas') { U.onglet = 'repas'; U.pile = []; U.vue = 'liste'; }
@@ -1182,10 +1220,10 @@
     voirIngsCuisine: function () { U.voirIngsCuisine = !U.voirIngsCuisine; afficher(); },
     cocherCuisine: function (v) { U.cochesCuisine[v] = !U.cochesCuisine[v]; afficher(); },
     supprimerPhoto: function (v) { enregistrerPhoto(v, null); afficher(); },
-    ajouter: function () { U.form = copie(FORM_VIDE); U.edition = null; U.photoForm = null; U.erreurForm = ''; U.msgCollage = ''; U.collage = ''; aller('ajout'); },
+    ajouter: function () { U.motCle = ''; U.form = copie(FORM_VIDE); U.edition = null; U.photoForm = null; U.erreurForm = ''; U.msgCollage = ''; U.collage = ''; aller('ajout'); },
     modifier: function () {
       var r = parId(U.sel); if (!r) return;
-      U.form = { nom: r.n, cat: r.c, kcal: String(r.k || ''), temps: String(r.t || ''), pers: '1', ings: r.i.map(ingEnTexte).join('\n'), etapes: r.s.join('\n'), kw: r.kw.join(', ') };
+      U.motCle = ''; U.form = { nom: r.n, cat: r.c, kcal: r.k != null ? String(r.k) : '', temps: String(r.t || ''), pers: '1', ings: r.i.map(ingEnTexte).join('\n'), etapes: r.s.join('\n'), kw: r.kw.join(', ') };
       U.edition = r.id; U.photoForm = null; U.erreurForm = ''; U.msgCollage = ''; U.collage = '';
       aller('ajout');
     },
@@ -1197,6 +1235,23 @@
       enregistrer(); retour(); message('Recette supprimée.');
     },
     formCat: function (v) { U.form.cat = v; afficher(); },
+    ajouterMot: function (v) {
+      var saisie = v || U.motCle || '';
+      var mots = listeMots(U.form);
+      saisie.split(/[,;#]/).forEach(function (m) {
+        m = m.trim().toLowerCase();
+        if (m && mots.map(norm).indexOf(norm(m)) < 0) mots.push(m);
+      });
+      U.form.kw = mots.join(', ');
+      if (!v) U.motCle = '';
+      var y = window.scrollY; afficher(); window.scrollTo(0, y);
+      if (!v) { var c = document.getElementById('f-mot'); if (c) c.focus(); }
+    },
+    retirerMot: function (v) {
+      var mots = listeMots(U.form); mots.splice(parseInt(v, 10), 1);
+      U.form.kw = mots.join(', ');
+      var y = window.scrollY; afficher(); window.scrollTo(0, y);
+    },
     lireCollage: function () {
       if (!U.collage.trim()) { U.msgCollage = 'Colle d’abord le texte d’une recette.'; afficher(); return; }
       var r = lireRecetteCollee(U.collage);
@@ -1212,6 +1267,22 @@
     cocherCourse: function (v) { D.coches[v] = !D.coches[v]; if (!D.coches[v]) delete D.coches[v]; enregistrer(); afficher(); },
     decocherCourses: function () { D.coches = {}; enregistrer(); afficher(); },
     exporter: exporter,
+    partagerRecette: function () {
+      var r = parId(U.sel); if (!r) return;
+      var p = D.pers;
+      var lien = lienRecette(r);
+      var texte = r.n + ' (' + p + ' pers.)\n\nIngrédients :\n' + r.i.map(function (i) { var q = quantite(i, p); return '- ' + nomIng(i, p) + (q ? ' : ' + q : ''); }).join('\n') +
+        '\n\nOuvrir la recette dans l’appli :';
+      if (navigator.share) { navigator.share({ title: r.n, text: texte, url: lien }).catch(function () {}); return; }
+      copier(texte + '\n' + lien, 'Recette copiée : colle-la dans un message.');
+    },
+    ajouterPartage: function () {
+      var r = U.partage; if (!r) return;
+      var id = 'u' + Date.now();
+      var copieR = JSON.parse(JSON.stringify(r)); copieR.id = id;
+      D.perso.push(copieR); enregistrer();
+      U.partage = null; U.sel = id; afficher(); message('Recette ajoutée à tes recettes.');
+    },
     parametres: function () {
       U.fq = ''; U.voirNonAimes = false;
       aller('reglages');
@@ -1265,6 +1336,10 @@
     U[champ] = el.value;
     if (champ === 'q' || champ === 'fq') afficher();
   });
+  // Touche Entrée dans le champ mot-clé = « Ajouter »
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target && e.target.id === 'f-mot') { e.preventDefault(); ACTIONS.ajouterMot(); }
+  });
   document.addEventListener('change', function (e) {
     var el = e.target;
     if (el.hasAttribute && el.hasAttribute('data-photo') && el.files && el.files[0]) {
@@ -1286,7 +1361,32 @@
     if (vieux) setTimeout(function () { message('Pense à faire une sauvegarde (onglet Favoris).'); }, 1500);
   }
 
+  // Ouvre une recette reçue par lien (#recette=nom ou #r=recette encodée)
+  function ouvrirLien() {
+    var h = location.hash.slice(1);
+    if (!h) return;
+    var r = null;
+    try {
+      if (h.indexOf('recette=') === 0) {
+        var s = decodeURIComponent(h.slice(8));
+        r = INTEGREES.filter(function (x) { return slugRecette(x.n) === s; })[0] || null;
+      } else if (h.indexOf('r=') === 0) {
+        var o = decoder(h.slice(2));
+        var deja = D.perso.filter(function (x) { return x.n === o.n; })[0];
+        if (deja) r = deja;
+        else {
+          U.partage = { id: 'partage', n: o.n, c: o.c || 'Plat', k: o.k != null ? o.k : null, t: o.t || 0, m: null, kw: o.kw || [], i: (o.i || []).map(lireIngredient), s: o.s || [] };
+          r = U.partage;
+        }
+      }
+    } catch (e) { message('Ce lien de recette est abîmé.'); }
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    if (r) { U.onglet = 'repas'; U.vue = 'liste'; aller('fiche', { sel: r.id }); }
+    else if (h.indexOf('recette=') === 0) message('Recette introuvable dans cette version de l’appli.');
+  }
+  window.addEventListener('hashchange', ouvrirLien);
   ouvrirPhotos(function () { afficher(); rappelSauvegarde(); });
+  ouvrirLien();
   afficher();
 
   // Pour les tests
