@@ -11,6 +11,9 @@
   // 1. Réglages et listes fixes
   // ---------------------------------------------------------------
   var CATS = ['Tous', 'Plat', 'Léger', 'Rapide', 'Végétarien', 'Dessert'];
+  // Filtres affichés dans la liste (Protéiné = au moins 30 g de protéines par personne et au moins 27 % des calories venant des protéines, ou mot-clé « protéiné »)
+  var FILTRES = CATS.concat(['Protéiné']);
+  var SEUIL_PROTEINES = 30;
   var TEINTES = { 'Plat': '#F3E3D3', 'Léger': '#DDEBDF', 'Rapide': '#F4EBC9', 'Végétarien': '#E2EAD3', 'Dessert': '#F2E0E6' };
   var KCALS = [{ id: 'all', label: 'Toutes', max: 99999 }, { id: '400', label: '< 400', max: 400 }, { id: '600', label: '< 600', max: 600 }];
   var JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -38,9 +41,10 @@
     epice: ['epice', 'cumin', 'paprika', 'curry', 'curcuma', 'cannelle', 'muscade', 'piment', 'gingembre', 'herbes de provence', 'ras el hanout', 'garam masala', 'cardamome', 'clou de girofle', 'quatre epices'],
     herbe: ['herbe', 'persil', 'coriandre', 'basilic', 'ciboulette', 'thym', 'laurier', 'romarin', 'origan', 'menthe', 'estragon', 'aneth', 'herbes de provence'],
     gratin: ['gratin', 'gratine', 'dauphinois', 'tartiflette', 'lasagne', 'parmentier'],
-    tarte: ['tarte', 'quiche', 'tourte', 'pizza']
+    tarte: ['tarte', 'quiche', 'tourte', 'pizza'],
+    proteine: ['proteine', 'proteines', 'sport']
   };
-  var LIBELLES_FAMILLES = { pates: 'Pâtes', poisson: 'Poisson', viande: 'Viande', poulet: 'Poulet', boeuf: 'Bœuf', porc: 'Porc', soupe: 'Soupe', gateau: 'Gâteau', legume: 'Légumes', fromage: 'Fromage', oeuf: 'Œufs', chocolat: 'Chocolat', vegetarien: 'Végétarien', fruit: 'Fruits', riz: 'Riz', epice: 'Épices', herbe: 'Herbes', gratin: 'Gratin', tarte: 'Tarte' };
+  var LIBELLES_FAMILLES = { pates: 'Pâtes', poisson: 'Poisson', viande: 'Viande', poulet: 'Poulet', boeuf: 'Bœuf', porc: 'Porc', soupe: 'Soupe', gateau: 'Gâteau', legume: 'Légumes', fromage: 'Fromage', oeuf: 'Œufs', chocolat: 'Chocolat', vegetarien: 'Végétarien', fruit: 'Fruits', riz: 'Riz', epice: 'Épices', herbe: 'Herbes', gratin: 'Gratin', tarte: 'Tarte', proteine: 'Protéiné' };
 
   // Saisons des fruits et légumes en France (0 = janvier … 11 = décembre)
   var SAISON = {
@@ -262,6 +266,34 @@
     return suivis.length > 0 && suivis.every(function (mois) { return mois.indexOf(MOIS) >= 0; });
   }
 
+  // Ingrédients cités dans une étape (pour afficher leurs quantités au bon moment)
+  var MOTS_VIDES = { de: 1, du: 1, des: 1, la: 1, le: 1, les: 1, au: 1, aux: 1, et: 1, a: 1, en: 1, d: 1, l: 1, un: 1, une: 1 };
+  function motsCles(nom) {
+    return norm(nom).split(' ').filter(function (w) { return w.length > 2 && !MOTS_VIDES[w]; }).map(racine);
+  }
+  function ingredientsEtape(r, texte) {
+    var motsTexte = {};
+    norm(texte).split(' ').forEach(function (w) { motsTexte[racine(w)] = 1; });
+    return r.i.filter(function (ing) {
+      if (ing.q == null) return false;
+      var m = motsCles(ing.n);
+      if (!m.length) return false;
+      // « Tranche de jambon » : on cherche le mot important (jambon) plutôt que « tranche »
+      var CONTENANTS = { tranche: 1, feuille: 1, gousse: 1, pave: 1, filet: 1, cuisse: 1, blanc: 1, boule: 1, steak: 1, escalope: 1 };
+      var principal = m.filter(function (w) { return !CONTENANTS[w]; });
+      var cherche = principal.length ? principal : m;
+      if (motsTexte[cherche[0]] || (cherche[1] && motsTexte[cherche[1]] && cherche[0].length < 5)) return true;
+      // « le fromage », « la viande », « les légumes »… : on retrouve les ingrédients de la famille
+      var nomNorm = normTexte(ing.n);
+      return ['fromage', 'viande', 'poisson', 'pates', 'legume', 'fruit', 'herbe', 'epice'].some(function (f) {
+        return motsTexte[racine(f)] && FAMILLES[f].some(function (m) { return contient(nomNorm, m); });
+      });
+    });
+  }
+  function quantitesEtape(r, texte, pers) {
+    return ingredientsEtape(r, texte).map(function (i) { return quantite(i, pers) + ' ' + nomIng(i, pers).toLowerCase(); });
+  }
+
   // Trouve « 10 minutes » ou « 3 heures » dans une étape
   function minutesEtape(texte) {
     var h = texte.match(/(\d+)\s*h(?:eures?)?\b(?:\s*(\d+))?/i);
@@ -395,6 +427,7 @@
     if (!regles.length) return true;
     return !r.i.some(function (i) { return regles.some(function (g) { return ingredientInterdit(i.n, g); }); });
   }
+  function estProteine(r) { return (r.m && r.m[0] >= SEUIL_PROTEINES && r.m[0] * 4 / Math.max(1, r.k) >= 0.27) || r.kw.some(function (k) { return norm(k).indexOf('protein') === 0; }); }
   function toutes() { return INTEGREES.concat(D.perso); }
   // Ordre d'affichage des jours selon le jour de début choisi (0 = lundi, 5 = samedi, 6 = dimanche)
   function ordreJours() { var o = []; for (var i = 0; i < 7; i++) o.push((R.debutSemaine + i) % 7); return o; }
@@ -451,6 +484,7 @@
       '<div class="carte-nom">' + esc(r.n) + '</div>' + (D.favs[r.id] ? '<span style="flex:none">' + I.coeurPlein(18) + '</span>' : '') + '</div>' +
       '<div class="badges"><span class="badge badge-cat">' + esc(r.c) + '</span>' +
       (deSaison(r) ? '<span class="badge badge-saison">De saison</span>' : '') +
+      (estProteine(r) ? '<span class="badge badge-proteine">Protéiné</span>' : '') +
       (R.calories ? '<span><b style="color:var(--texte)">' + r.k + '</b> kcal</span>' : '') + '<span>' + r.t + ' min</span></div>' +
       (note ? '<div class="petit rangee" style="gap:4px">' + I.etoile(14, true) + ' Déjà fait · noté ' + note + '/5</div>' : '') +
       '</div></button>';
@@ -463,7 +497,7 @@
   function resultatsListe() {
     var maxK = KCALS.filter(function (k) { return k.id === U.kcal; })[0].max;
     var cand = toutes().filter(function (r) {
-      return recetteAutorisee(r) && (U.cat === 'Tous' || r.c === U.cat) && r.k < maxK && (!U.rapide || r.t < 30);
+      return recetteAutorisee(r) && (U.cat === 'Tous' || r.c === U.cat || (U.cat === 'Protéiné' && estProteine(r))) && r.k < maxK && (!U.rapide || r.t < 30);
     });
     var infos = cand.map(function (r) { return infoRecherche(r, U.q); });
     var meilleur = Math.max.apply(null, infos.map(function (x) { return x.niveau; }).concat([1]));
@@ -521,7 +555,7 @@
     return '<label class="cache-visuel" for="recherche">Rechercher un repas</label>' +
       '<input id="recherche" class="champ" type="search" placeholder="Rechercher : pâtes, poisson, gâteau…" autocomplete="off" value="' + esc(U.q) + '" data-i="q">' +
       (puces ? '<div class="rangee" style="gap:6px"><span class="tres-petit">' + titrePuces + '</span>' + puces + '</div>' : '') +
-      '<div class="defile">' + CATS.map(function (c) { return puce(c, U.cat === c, 'cat', c); }).join('') + '</div>' +
+      '<div class="defile">' + FILTRES.map(function (c) { return puce(c, U.cat === c, 'cat', c); }).join('') + '</div>' +
       '<div class="rangee">' + (R.calories ? '<span class="petit">Calories</span>' + KCALS.map(function (k) { return puce(k.label, U.kcal === k.id, 'kcal', k.id, 'petite noire'); }).join('') : '') +
       puce('Moins de 30 min', U.rapide, 'rapide', '', 'petite noire') + '</div>' +
       '<div class="carte" style="padding:4px 14px"><button class="case-ligne" style="border:none;justify-content:space-between;font-weight:600;font-size:14px" data-a="voirExclus"><span>Exclure des ingrédients</span><span class="petit" style="font-weight:500">' + esc(resumeExclus) + '</span></button>' +
@@ -621,7 +655,11 @@
       '<div class="carte"><h3 class="section-titre" style="margin:0 0 6px">Ingrédients pour ' + p + ' personne' + (p > 1 ? 's' : '') + '</h3>' +
       r.i.map(function (i) { return '<div class="ingredient"><span>' + esc(nomIng(i, p)) + '</span><b>' + esc(quantite(i, p)) + '</b></div>'; }).join('') + '</div>' +
       '<div class="carte pile" style="gap:14px"><h3 class="section-titre" style="margin:0">Préparation</h3>' +
-      r.s.map(function (t, n) { return '<div class="etape"><div class="etape-num">' + (n + 1) + '</div><div class="etape-texte">' + esc(t) + '</div></div>'; }).join('') + '</div>' +
+      r.s.map(function (t, n) {
+        var qs = quantitesEtape(r, t, p);
+        return '<div class="etape"><div class="etape-num">' + (n + 1) + '</div><div class="etape-texte">' + esc(t) +
+          (qs.length ? '<div class="etape-quantites">' + qs.map(esc).join(' · ') + '</div>' : '') + '</div></div>';
+      }).join('') + '</div>' +
       '<div class="pile" style="gap:8px"><b style="font-size:15px">Ajouter au planning</b><div class="' + (R.midi && R.soir ? 'grille2' : 'pile') + '">' +
       (R.midi ? '<button class="btn btn-principal btn-grand" data-a="planifier" data-v="midi"' + (libreM < 0 ? ' disabled' : '') + '>' + (libreM < 0 ? 'Midis complets' : 'Midi (' + JOURS_COURTS[libreM] + ')') + '</button>' : '') +
       (R.soir ? '<button class="btn btn-contour btn-grand" style="border-color:var(--vert);color:var(--vert-fonce)" data-a="planifier" data-v="soir"' + (libreS < 0 ? ' disabled' : '') + '>' + (libreS < 0 ? 'Soirs complets' : 'Soir (' + JOURS_COURTS[libreS] + ')') + '</button>' : '') + '</div></div>' +
@@ -645,6 +683,12 @@
       '<div class="progression"><div style="width:' + Math.round((i + 1) / total * 100) + '%"></div></div>' +
       '<div style="font-size:13px;font-weight:600;color:var(--orange)">' + esc(r.n) + '</div>' +
       '<div class="cuisine-texte">' + esc(texte) + '</div>' +
+      (function () {
+        var qs = ingredientsEtape(r, texte);
+        if (!qs.length) return '';
+        return '<div class="carte cuisine-quantites"><div class="tres-petit" style="font-weight:600;text-transform:uppercase;letter-spacing:.5px">Pour cette étape (' + p + ' pers.)</div>' +
+          qs.map(function (ing) { return '<div class="ingredient" style="border-top:none;padding:4px 0"><span>' + esc(nomIng(ing, p)) + '</span><b>' + esc(quantite(ing, p)) + '</b></div>'; }).join('') + '</div>';
+      })() +
       (U.minuteur != null ? '<div class="minuteur"><div><div class="tres-petit" style="color:#C9CCC5">Minuteur</div><b>' + deuxChiffres(Math.floor(U.minuteur / 60)) + ':' + deuxChiffres(U.minuteur % 60) + '</b></div>' +
         '<button class="btn" style="background:transparent;border:1px solid #5E655C;color:#fff" data-a="arreterMinuteur">Arrêter</button></div>' : '') +
       (U.minuteurFini ? '<button class="alerte" data-a="fermerAlerte">Minuteur terminé ! (toucher pour fermer)</button>' : '') +
@@ -681,7 +725,7 @@
       '<textarea id="f-ings" class="champ" rows="6" data-i="form.ings">' + esc(f.ings) + '</textarea></div>' +
       '<div><label class="etiquette" for="f-etapes">Étapes de la recette</label><div class="aide">Une étape par ligne. Si une étape dit « 10 minutes », un minuteur apparaîtra en mode cuisine.</div>' +
       '<textarea id="f-etapes" class="champ" rows="6" data-i="form.etapes">' + esc(f.etapes) + '</textarea></div>' +
-      '<div><label class="etiquette" for="f-kw">Mots-clés</label><input id="f-kw" class="champ" type="text" placeholder="Ex. : four, enfants, hiver" value="' + esc(f.kw) + '" data-i="form.kw"></div>' +
+      '<div><label class="etiquette" for="f-kw">Mots-clés</label><input id="f-kw" class="champ" type="text" placeholder="Ex. : four, enfants, protéiné" value="' + esc(f.kw) + '" data-i="form.kw"></div>' +
       (U.erreurForm ? '<div style="font-size:14px;color:var(--rouge);font-weight:500">' + esc(U.erreurForm) + '</div>' : '') +
       '<button class="btn btn-principal btn-grand" data-a="enregistrerRecette">' + (U.edition ? 'Enregistrer les modifications' : 'Enregistrer le repas') + '</button>';
   }

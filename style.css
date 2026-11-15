@@ -120,6 +120,8 @@ textarea.champ { padding: 12px 14px; min-height: 110px; resize: vertical; line-h
 .badge { font-size: 12px; font-weight: 600; border-radius: 8px; padding: 3px 7px; }
 .badge-cat { color: var(--orange); background: var(--orange-pale); }
 .badge-saison { color: var(--vert-fonce); background: var(--vert-pale); }
+.badge-proteine { color: #1F4A7A; background: #E1ECF7; }
+html[data-theme="sombre"] .badge-proteine { color: #A9C9EE; background: #1C2A3A; }
 .badge-ok { color: #fff; background: var(--vert); }
 .ligne-carte { width: 100%; text-align: left; background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; padding: 10px; display: flex; align-items: center; gap: 12px; }
 
@@ -136,6 +138,9 @@ textarea.champ { padding: 12px 14px; min-height: 110px; resize: vertical; line-h
 .etape { display: flex; gap: 12px; align-items: flex-start; }
 .etape-num { flex: none; width: 28px; height: 28px; border-radius: 14px; background: var(--vert-pale); color: var(--vert-fonce); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .etape-texte { font-size: 15px; line-height: 1.45; padding-top: 3px; }
+.etape-quantites { margin-top: 4px; font-size: 13px; font-weight: 600; color: var(--vert-fonce); }
+.cuisine-quantites { padding: 10px 16px; }
+html.grand-cuisine .cuisine-quantites .ingredient { font-size: 18px; }
 .mots-cles { display: flex; flex-wrap: wrap; gap: 6px; }
 .mot-cle { font-size: 12px; color: var(--gris); border: 1px solid var(--bord-fort); border-radius: 10px; padding: 3px 8px; }
 .etoiles { display: flex; gap: 2px; }
